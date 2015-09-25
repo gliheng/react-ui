@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Layout.js examples</title>
+        <style media="screen">
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+            html, body, #app{
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            .a {background-color: #B0FF7B;}
+            .b {background-color: #51E8E8;}
+            .c {background-color: #5160E8;}
+            .d {background-color: #8B66FF;}
+            .e {background-color: #AF5CE8;}
+            .f {background-color: #E85C62;}
+            .g {background-color: #FFBB41;}
+
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
+        <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
+        <script src="../dist/layout.js" charset="utf-8"></script>
+        <script type="text/jsx">
+            Layout.persistFunc(function(id) {
+                // reader
+                return JSON.parse(localStorage[`Layout-Dimension:${id}`] || '{}');
+            }, function (id, data) {
+                // writer
+                localStorage[`Layout-Dimension:${id}`] = JSON.stringify(data);
+            });
+            Layout.render(
+                <Layout.VGroup id="group">
+                    <Layout.HGroup flex={2}>
+                        <Layout.View className="a" width={400}>hello left</Layout.View>
+                        <Layout.VGroup resizable={true}>
+                            <Layout.View className="b">hello top of middle</Layout.View>
+                            <Layout.HGroup resizable={false}>
+                                <Layout.View className="c">hello bottom of middle</Layout.View>
+                                <Layout.View className="d">hello bottom of middle</Layout.View>
+                                <Layout.View className="e">hello bottom of middle</Layout.View>
+                            </Layout.HGroup>
+                        </Layout.VGroup>
+                        <Layout.View className="f" width={200}>hello right</Layout.View>
+                    </Layout.HGroup>
+                    <Layout.View className="g">hello bottom</Layout.View>
+                </Layout.VGroup>,
+                document.getElementById('app')
+            );
+        </script>
+    </body>
+</html>
