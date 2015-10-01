@@ -3,7 +3,8 @@
 Layout aim to make layout easy with dozens of reusable react components.
 
 # TODO
-HGroup minWidth maxWidth ...
+minWidth maxWidth for HGroup and Grid
+Grid need to persist size and position
 
 
 ## Features

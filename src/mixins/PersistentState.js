@@ -17,7 +17,9 @@ export default {
         // console.log(this.getDOMNode());
         if (full && Array.isArray(children)) {
             s.children = children.map((c, i)=> {
-                return this.refs['child-' + i].getState(full);
+                var child = this.refs['child-' + i];
+                if (child === undefined) return null;
+                return child.getState(full);
             });
         }
         return s;
@@ -28,7 +30,12 @@ export default {
             childrenState = state.children;
         if (childrenState && Array.isArray(children)) {
             children.forEach((c, i)=> {
-                return this.refs['child-' + i].putState(childrenState[i]);
+                var child = this.refs['child-' + i];
+                if (child === undefined) {
+                    console.error('Can\' find component to apply state');
+                    return;
+                }
+                return child.putState(childrenState[i]);
             });
         }
         // console.log(this.getDOMNode(), exclude(state, 'children'));

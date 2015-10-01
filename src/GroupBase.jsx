@@ -5,9 +5,9 @@ import DimensionMixin from './mixins/Dimension';
 import PersistentStateMixin from './mixins/PersistentState';
 import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
 
-let groupFactory = function (mode, elementName) {
+let groupFactory = function (type, elementName) {
     return React.createClass({
-        mixins: [LayoutManagerMixinFactory(mode), DimensionMixin, PersistentStateMixin],
+        mixins: [LayoutManagerMixinFactory(type), DimensionMixin, PersistentStateMixin],
 
         render() {
             var className = elementName,
@@ -28,9 +28,9 @@ let groupFactory = function (mode, elementName) {
                 if (this.props.resizable) {
                     if (i != children.length - 1) {
                         var className;
-                        if (mode == Constants.HORIZONTAL) {
+                        if (type == Constants.HGROUP) {
                             className = 'we';
-                        } else if (mode == Constants.VERTICAL) {
+                        } else if (type == Constants.VGROUP) {
                             className = 'ns';
                         }
                         mutant.push(<Gutter className={className} key={'gutter-' + i} getLayoutManager={this.getLayoutManager} idx={i}></Gutter>);

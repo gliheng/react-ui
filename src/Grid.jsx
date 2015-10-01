@@ -6,7 +6,7 @@ import PersistentStateMixin from './mixins/PersistentState';
 import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
 
 let Grid = React.createClass({
-    mixins: [LayoutManagerMixinFactory(), DimensionMixin, PersistentStateMixin],
+    mixins: [LayoutManagerMixinFactory(Constants.GRID), DimensionMixin, PersistentStateMixin],
 
     getDefaultProps() {
         return {
@@ -15,97 +15,125 @@ let Grid = React.createClass({
         };
     },
 
-    componentDidUpdate() {
-    },
-
-    renderGutters() {
+    renderGutters(colpos, rowpos) {
         var gutters = [];
         // NOTE: somewhere has to calc col and row size
-        var rows = parseInt(this.props.rows);
-        var cols = parseInt(this.props.cols);
-        var idx = 0;
+        var rows = parseInt(this.props.rows),
+            cols = parseInt(this.props.cols),
+            idx = 0;
 
         // vertical gutters
-        var x = 0;
-        for (var i = 0; i < this.colsize.length - 1; i++) {
-            x += this.colsize[i];
+        for (var i = 0; i < cols - 1; i++) {
+            let key = 'gutter-' + idx;
             let style = {
                 position: 'absolute',
-                left: x,
+                left: colpos[i+1] - this.props.colGutterWidth,
                 top: 0,
                 width: this.props.colGutterWidth,
                 height: '100%'
             };
-            gutters.push(<Gutter key={'gutter-' + idx} style={style} className="we" getLayoutManager={this.getLayoutManager} idx={idx++}></Gutter>);
-            x += this.props.colGutterWidth;
+            gutters.push(<Gutter className="we" key={key} ref={key} style={style} getLayoutManager={this.getLayoutManager} idx={idx++}></Gutter>);
         }
 
         // horizontal gutters
-        var y = 0;
-        for (var i = 0; i < this.rowsize.length - 1; i++) {
-            y += this.rowsize[i];
+        for (var i = 0; i < rows - 1; i++) {
+            let key = 'gutter-' + idx;
             let style = {
                 position: 'absolute',
                 left: 0,
-                top: y,
+                top: rowpos[i+1] - this.props.rowGutterWidth,
                 width: '100%',
                 height: this.props.rowGutterWidth
             };
-            gutters.push(<Gutter key={'gutter-' + idx} style={style} className="ns" getLayoutManager={this.getLayoutManager} idx={idx++}></Gutter>);
-            y += this.props.colGutterWidth;
+            gutters.push(<Gutter className="ns" key={key} ref={key} style={style} getLayoutManager={this.getLayoutManager} idx={idx++}></Gutter>);
         }
 
-        // corner gutters
+        // corner gutters?
         return gutters;
     },
 
+    componentWillMount() {
+        // parse colsize property
+        var [colsize, colprecise] = this.parseSizeSpec(this.props.colsize);
+        var [rowsize, rowprecise] = this.parseSizeSpec(this.props.rowsize);
+
+        this.state.colsize = colsize;
+        this.state.colprecise = colprecise;
+        this.state.rowsize = rowsize;
+        this.state.rowprecise = rowprecise;
+    },
+
+    parseSizeSpec(spec) {
+        var size = [],
+            precise = [];
+        spec.split(',').forEach(function (v, i) {
+            if (v.endsWith('px')) {
+                size[i] = parseInt(v.substr(0, v.length - 2));
+                precise[i] = true;
+            } else {
+                size[i] = parseInt(v);
+                precise[i] = false;
+            }
+        });
+        return [size, precise];
+    },
+
     render() {
-        this.colsize = [100, 300, 100];
-        this.rowsize = [100, 100, 100];
+        var props = this.props,
+            state = this.state;
 
-        var d = 0;
-        this.colpos = this.colsize.map((size, i)=> {
-            var p = d;
-            d = p + size + this.props.colGutterWidth;
-            return p;
-        });
-        var d = 0;
-        this.rowpos = this.rowsize.map((size, i)=> {
-            var p = d;
-            d = p + size + this.props.rowGutterWidth;
-            return p;
-        });
+        var size = this.getLayoutManager().layout(
+            this.state.colsize,
+            this.state.rowsize,
+            this.state.colprecise,
+            this.state.rowprecise, {
+                colGutterWidth: props.colGutterWidth,
+                rowGutterWidth: props.rowGutterWidth,
+                cols: parseInt(props.cols),
+                rows: parseInt(props.rows)
+            },
+            state.width,
+            state.height);
 
-        var className = 'Grid',
-            children = this.props.children,
-            mutant = [];
+        if (size) {
+            var [colsize, rowsize, colpos, rowpos] = size;
 
-        // create gutters
-        if (this.props.resizable) {
-            mutant = mutant.concat(this.renderGutters());
+            var className = 'Grid',
+                children = props.children,
+                mutant = [];
+
+            // create gutters
+            if (props.resizable) {
+                mutant = mutant.concat(this.renderGutters(colpos, rowpos));
+            }
+
+            // create panels
+            React.Children.forEach(children, (c, i)=> {
+                var x = parseInt(c.props.col),
+                    y = parseInt(c.props.row),
+                    key = `child-${x}-${y}`;
+
+                mutant.push(React.addons.cloneWithProps(c, {
+                    key: key,
+                    ref: key,
+                    parent: this,
+                    style: {
+                        position: 'absolute',
+                        left: colpos[x],
+                        top: rowpos[y],
+                        width: colsize[x],
+                        height: rowsize[y]
+                    }
+                }));
+            });
         }
 
-        // create panels
-        React.Children.forEach(children, (c, i)=> {
-            var key = 'child-' + i,
-                x = parseInt(c.props.col),
-                y = parseInt(c.props.row);
-
-            mutant.push(React.addons.cloneWithProps(c, {
-                key: key,
-                ref: key,
-                parent: this,
-                style: {
-                    position: 'absolute',
-                    left: this.colpos[x],
-                    top: this.rowpos[y],
-                    width: this.colsize[x],
-                    height: this.rowsize[y]
-                }
-            }));
-        });
+        var style = {
+            width: state.width,
+            height: state.height
+        };
         return (
-            <div id={this.props.id} className={className}>{mutant}</div>
+            <div id={props.id} className={className} style={style}>{mutant}</div>
         );
     }
 });

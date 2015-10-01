@@ -13,6 +13,15 @@
                 height: 100%;
                 overflow: hidden;
             }
+
+            .a, .b, .c, .d, .e, .f, .g {
+                display: flex;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                font-size: 2em;
+                color: white;
+            }
             .a {background-color: #B0FF7B;}
             .b {background-color: #51E8E8;}
             .c {background-color: #5160E8;}
@@ -39,18 +48,18 @@
             Layout.render(
                 <Layout.VGroup id="group">
                     <Layout.HGroup flex={2}>
-                        <Layout.View className="a" width={400}>hello left</Layout.View>
+                        <Layout.View className="a" width={400}>left</Layout.View>
                         <Layout.VGroup resizable={true}>
-                            <Layout.View className="b">hello top of middle</Layout.View>
+                            <Layout.View className="b">top of middle</Layout.View>
                             <Layout.HGroup resizable={false}>
-                                <Layout.View className="c">hello bottom of middle</Layout.View>
-                                <Layout.View className="d">hello bottom of middle</Layout.View>
-                                <Layout.View className="e">hello bottom of middle</Layout.View>
+                                <Layout.View className="c">bottom of middle</Layout.View>
+                                <Layout.View className="d">bottom of middle</Layout.View>
+                                <Layout.View className="e">bottom of middle</Layout.View>
                             </Layout.HGroup>
                         </Layout.VGroup>
-                        <Layout.View className="f" width={200}>hello right</Layout.View>
+                        <Layout.View className="f" width={200}>right</Layout.View>
                     </Layout.HGroup>
-                    <Layout.View className="g">hello bottom</Layout.View>
+                    <Layout.View className="g">bottom</Layout.View>
                 </Layout.VGroup>,
                 document.getElementById('app')
             );
