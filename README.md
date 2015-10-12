@@ -13,7 +13,7 @@ react-ui a UI library for react. It contains dozens of reusable react components
 ## Basic Usage
 
 ```js
-    Layout.render(
+    UI.render(
         <HGroup seperator="True">
             <VGroup seperator=True>
                 <View klass="" params={}></View>
@@ -28,7 +28,7 @@ react-ui a UI library for react. It contains dozens of reusable react components
 ```
 
 ```js
-Layout.render(
+UI.render(
     <Grid rows="3" cols="3">
         <View row="1" col="1"></View>
         <View row="1" col="2"></View>

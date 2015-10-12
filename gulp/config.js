@@ -8,12 +8,12 @@ var packageJson = require(path.join(pwd, 'package.json'));
 module.exports = {
     webpack: {
         entry: {
-            'layout': src + '/index.jsx'
+            'react-ui': src + '/main.jsx'
         },
         output: {
             path: dest,
             filename: '[name].js',
-            library: 'Layout',
+            library: 'ReactUI',
             libraryTarget: 'umd'
         },
         module: {

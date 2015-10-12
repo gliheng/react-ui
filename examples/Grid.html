@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Layout.js examples</title>
+        <title>ReactUI Grid examples</title>
         <style media="screen">
             html, body {
                 margin: 0;
@@ -36,27 +36,27 @@
         <div id="app"></div>
         <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
         <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
-        <script src="../dist/layout.js" charset="utf-8"></script>
+        <script src="../dist/react-ui.js" charset="utf-8"></script>
         <script type="text/jsx">
-            Layout.persistFunc(function(id) {
+            ReactUI.persistFunc(function(id) {
                 // reader
                 return JSON.parse(localStorage[`Layout-Dimension:${id}`] || '{}');
             }, function (id, data) {
                 // writer
                 localStorage[`Layout-Dimension:${id}`] = JSON.stringify(data);
             });
-            Layout.render(
-                <Layout.Grid id="grid" rows="3" cols="3" colsize="200px,1,1" rowsize="2,1,2">
-                    <Layout.View className="a" row="0" col="0">A</Layout.View>
-                    <Layout.View className="b" row="0" col="1">B</Layout.View>
-                    <Layout.View className="c" row="0" col="2">C</Layout.View>
-                    <Layout.View className="d" row="1" col="0">D</Layout.View>
-                    <Layout.View className="e" row="1" col="1">E</Layout.View>
-                    <Layout.View className="f" row="1" col="2">F</Layout.View>
-                    <Layout.View className="g" row="2" col="0">G</Layout.View>
-                    <Layout.View className="h" row="2" col="1">H</Layout.View>
-                    <Layout.View className="i" row="2" col="2">I</Layout.View>
-                </Layout.Grid>,
+            ReactUI.render(
+                <ReactUI.Grid id="grid" rows="3" cols="3" colsize="200px,1,1" rowsize="2,1,2">
+                    <ReactUI.View className="a" row="0" col="0">A</ReactUI.View>
+                    <ReactUI.View className="b" row="0" col="1">B</ReactUI.View>
+                    <ReactUI.View className="c" row="0" col="2">C</ReactUI.View>
+                    <ReactUI.View className="d" row="1" col="0">D</ReactUI.View>
+                    <ReactUI.View className="e" row="1" col="1">E</ReactUI.View>
+                    <ReactUI.View className="f" row="1" col="2">F</ReactUI.View>
+                    <ReactUI.View className="g" row="2" col="0">G</ReactUI.View>
+                    <ReactUI.View className="h" row="2" col="1">H</ReactUI.View>
+                    <ReactUI.View className="i" row="2" col="2">I</ReactUI.View>
+                </ReactUI.Grid>,
                 document.getElementById('app')
             );
         </script>

@@ -7,6 +7,12 @@
   },
   "author": "amadeus",
   "license": "MIT",
+  "main": "main.js",
+  "files": [
+     "README.md",
+     "dist/",
+     "src/"
+  ],
   "dependencies": {
     "react": "^0.13.3"
   },
