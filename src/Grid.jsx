@@ -111,7 +111,8 @@ let Grid = React.createClass({
             React.Children.forEach(children, (c, i)=> {
                 var x = parseInt(c.props.col),
                     y = parseInt(c.props.row),
-                    key = `child-${x}-${y}`;
+                    key = `child-${i}`;
+                    // key = `child-${x}-${y}`;
 
                 mutant.push(React.addons.cloneWithProps(c, {
                     key: key,

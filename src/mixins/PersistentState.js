@@ -11,6 +11,8 @@ export function setWriter(_writer) {
 }
 
 export default {
+    /* get the state dict recursively from the component
+     **/
     getState(full) {
         var s = clone(this.state),
             children = this.props.children;
@@ -25,6 +27,8 @@ export default {
         return s;
     },
 
+    /* apply state to the component
+     **/
     putState(state) {
         var children = this.props.children,
             childrenState = state.children;
@@ -32,7 +36,10 @@ export default {
             children.forEach((c, i)=> {
                 var child = this.refs['child-' + i];
                 if (child === undefined) {
-                    console.error('Can\' find component to apply state');
+                    // this case may happen, if the component's children is not rendered
+                    // since it does not have a width or height in Grid component
+                    
+                    // console.error('Can\' find component to apply state');
                     return;
                 }
                 return child.putState(childrenState[i]);
@@ -42,6 +49,8 @@ export default {
         this.setState(exclude(state, 'children'));
     },
 
+    /* get state from component then persist the state info
+     **/
     saveState() {
         var id = this.props.id;
         // only component with id attribute can save state
@@ -52,6 +61,8 @@ export default {
         writer(id, s);
     },
 
+    /* get state from store the apply it the component
+     **/
     restoreState() {
         var id = this.props.id;
         if (!id) {

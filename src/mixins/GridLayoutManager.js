@@ -127,6 +127,10 @@ class GridLayoutManager {
         delete this.rowsizeSnapshot;
         delete this.pxColsizeSnapshot;
         delete this.pxRowsizeSnapshot;
+
+        // root component has an id
+        var root = getRootComponent(this.parent);
+        if (root) root.saveState();
     }
 }
 

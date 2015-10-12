@@ -1,6 +1,6 @@
 # ReactUI
 
-ReactUI a UI library for react. It contains dozens of reusable react components.
+react-ui a UI library for react. It contains dozens of reusable react components.
 
 
 ## Features
