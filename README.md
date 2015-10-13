@@ -13,22 +13,22 @@ react-ui a UI library for react. It contains dozens of reusable react components
 ## Basic Usage
 
 ```js
-    UI.render(
-        <HGroup seperator="True">
-            <VGroup seperator=True>
-                <View klass="" params={}></View>
-            </VGroup>
-            <VGroup>
-                <View klass="" params={}></View>
-                <View klass="" params={}></View>
-            </VGroup>
-        </HGroup>,
-        document.getElementById('app')
-    )
+React.render(
+    <HGroup seperator="True">
+        <VGroup seperator=True>
+            <View klass="" params={}></View>
+        </VGroup>
+        <VGroup>
+            <View klass="" params={}></View>
+            <View klass="" params={}></View>
+        </VGroup>
+    </HGroup>,
+    document.getElementById('app')
+)
 ```
 
 ```js
-UI.render(
+React.render(
     <Grid rows="3" cols="3">
         <View row="1" col="1"></View>
         <View row="1" col="2"></View>

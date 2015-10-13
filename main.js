@@ -1,1 +1,1 @@
-module.exports = require('./dist/react-ui');
+export * from './src/main.jsx';

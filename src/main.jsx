@@ -5,14 +5,15 @@ import Grid from './Grid.jsx';
 
 require('./styles/style.scss');
 
-function render(element, $container) {
-    var app = React.render.apply(React, arguments);
+function bootstrap(app) {
     function resize() {
+        var $node = app.getDOMNode().parentNode;
         app.setState({
-            width: $container.clientWidth,
-            height: $container.clientHeight
+            width: $node.clientWidth,
+            height: $node.clientHeight
         });
     }
+
     window.addEventListener('resize', function() {
         resize();
         app.saveState();
@@ -29,4 +30,4 @@ function persistFunc(reader, writer) {
     setWriter(writer);
 }
 
-export {HGroup, VGroup, Grid, View, render, persistFunc};
+export {HGroup, VGroup, Grid, View, bootstrap, persistFunc};

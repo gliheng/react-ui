@@ -82,14 +82,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(15);
 
-	function render(element, $container) {
-	    var app = React.render.apply(React, arguments);
+	function bootstrap(app) {
 	    function resize() {
+	        var $node = app.getDOMNode().parentNode;
 	        app.setState({
-	            width: $container.clientWidth,
-	            height: $container.clientHeight
+	            width: $node.clientWidth,
+	            height: $node.clientHeight
 	        });
 	    }
+
 	    window.addEventListener('resize', function () {
 	        resize();
 	        app.saveState();
@@ -109,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.VGroup = _VGroupJsx2['default'];
 	exports.Grid = _GridJsx2['default'];
 	exports.View = _ViewJsx2['default'];
-	exports.render = render;
+	exports.bootstrap = bootstrap;
 	exports.persistFunc = persistFunc;
 
 /***/ },
@@ -542,6 +543,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	            return this.layoutManager;
+	        },
+
+	        componentDidMount: function componentDidMount() {
+	            // To render child components, this one needs to know DOM size
+	            var $node = this.getDOMNode();
+	            if (!('width' in this.state || 'height' in this.state)) {
+	                this.setState({
+	                    width: $node.clientWidth,
+	                    height: $node.clientHeight
+	                });
+	            }
 	        }
 
 	    };

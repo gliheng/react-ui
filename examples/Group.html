@@ -13,7 +13,10 @@
                 height: 100%;
                 overflow: hidden;
             }
-
+            #group {
+                width: 100%;
+                height: 100%;
+            }
             .a, .b, .c, .d, .e, .f, .g {
                 display: flex;
                 text-align: center;
@@ -45,7 +48,7 @@
                 // writer
                 localStorage[`Layout-Dimension:${id}`] = JSON.stringify(data);
             });
-            ReactUI.render(
+            var app = React.render(
                 <ReactUI.VGroup id="group">
                     <ReactUI.HGroup flex={2}>
                         <ReactUI.View className="a" width={400}>left</ReactUI.View>
@@ -63,6 +66,7 @@
                 </ReactUI.VGroup>,
                 document.getElementById('app')
             );
+            ReactUI.bootstrap(app);
         </script>
     </body>
 </html>
