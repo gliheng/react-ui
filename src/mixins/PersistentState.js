@@ -2,12 +2,12 @@ import {noop, clone, exclude} from '../Utils';
 
 var reader = noop;
 export function setReader(_reader) {
-    reader = _reader;
+    reader = _reader || noop;
 }
 
 var writer = noop;
 export function setWriter(_writer) {
-    writer = _writer;
+    writer = _writer || noop;
 }
 
 export default {
@@ -38,7 +38,7 @@ export default {
                 if (child === undefined) {
                     // this case may happen, if the component's children is not rendered
                     // since it does not have a width or height in Grid component
-                    
+
                     // console.error('Can\' find component to apply state');
                     return;
                 }

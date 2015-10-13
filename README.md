@@ -12,32 +12,53 @@ react-ui a UI library for react. It contains dozens of reusable react components
 
 ## Basic Usage
 
+- HGroup, VGroup
+
+    ```js
+    React.render(
+        <HGroup>
+            <VGroup>
+                <View>left top</View>
+                <View>left bottom</View>
+            </VGroup>
+            <VGroup>
+                <View>right top</View>
+                <View>right bottom</View>
+            </VGroup>
+        </HGroup>,
+        document.getElementById('app')
+    )
+    ```
+
+- Grid
+
+    ```js
+    React.render(
+        <Grid rows="3" cols="3">
+            <View row="1" col="1"></View>
+            <View row="1" col="2"></View>
+            <View row="2" col="1"></View>
+            <View row="2" col="2"></View>
+        </Grid>,
+        document.getElementById('app')
+    )
+    ```
+
+- Tabs
+
 ```js
 React.render(
-    <HGroup seperator="True">
-        <VGroup seperator=True>
-            <View klass="" params={}></View>
-        </VGroup>
-        <VGroup>
-            <View klass="" params={}></View>
-            <View klass="" params={}></View>
-        </VGroup>
-    </HGroup>,
+    <Tabs>
+        <div label="tab 1">A</div>
+        <div label="tab 2">B</div>
+        <div label="tab 3">C</div>
+    </Tabs>,
     document.getElementById('app')
 )
 ```
 
-```js
-React.render(
-    <Grid rows="3" cols="3">
-        <View row="1" col="1"></View>
-        <View row="1" col="2"></View>
-        <View row="2" col="1"></View>
-        <View row="2" col="2"></View>
-    </Grid>,
-    document.getElementById('app')
-)
-```
+- Popup
+
 
 ### TODO ###
 
@@ -55,14 +76,6 @@ layout.restoreLayout()
     <View></View>
     <View></View>
 </Area>
-
-<Tabs>
-    <View title="" closable="True">
-        <HGroup>
-        </HGroup>
-    </View>
-    <View></View>
-</Tabs>
 
 ## More Example
 Check out the examples directory

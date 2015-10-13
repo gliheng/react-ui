@@ -60,6 +60,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
+	var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _HGroupJsx = __webpack_require__(1);
@@ -78,9 +80,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _GridJsx2 = _interopRequireDefault(_GridJsx);
 
+	var _TabsJsx = __webpack_require__(15);
+
+	var _TabsJsx2 = _interopRequireDefault(_TabsJsx);
+
 	var _mixinsPersistentState = __webpack_require__(8);
 
-	__webpack_require__(15);
+	__webpack_require__(16);
+
+	var defaults = {
+	    persistState: true,
+	    persistFunc: function persistFunc() {
+	        return [function (id) {
+	            return JSON.parse(localStorage['Layout-Dimension:' + id] || '{}');
+	        }, function (id, data) {
+	            return localStorage['Layout-Dimension:' + id] = JSON.stringify(data);
+	        }];
+	    }
+	};
+
+	function config(_config) {
+	    Object.assign(defaults, _config);
+
+	    if (defaults.persistState) {
+	        var _defaults$persistFunc = defaults.persistFunc();
+
+	        var _defaults$persistFunc2 = _slicedToArray(_defaults$persistFunc, 2);
+
+	        var reader = _defaults$persistFunc2[0];
+	        var writer = _defaults$persistFunc2[1];
+
+	        (0, _mixinsPersistentState.setReader)(reader);
+	        (0, _mixinsPersistentState.setWriter)(writer);
+	    } else {
+	        (0, _mixinsPersistentState.setReader)(null);
+	        (0, _mixinsPersistentState.setWriter)(null);
+	    }
+	}
+
+	config();
 
 	function bootstrap(app) {
 	    function resize() {
@@ -101,17 +139,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return app;
 	}
 
-	function persistFunc(reader, writer) {
-	    (0, _mixinsPersistentState.setReader)(reader);
-	    (0, _mixinsPersistentState.setWriter)(writer);
-	}
-
 	exports.HGroup = _HGroupJsx2['default'];
 	exports.VGroup = _VGroupJsx2['default'];
 	exports.Grid = _GridJsx2['default'];
 	exports.View = _ViewJsx2['default'];
+	exports.Tabs = _TabsJsx2['default'];
 	exports.bootstrap = bootstrap;
-	exports.persistFunc = persistFunc;
+	exports.config = config;
 
 /***/ },
 /* 1 */
@@ -423,13 +457,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	var reader = _Utils.noop;
 
 	function setReader(_reader) {
-	    reader = _reader;
+	    reader = _reader || _Utils.noop;
 	}
 
 	var writer = _Utils.noop;
 
 	function setWriter(_writer) {
-	    writer = _writer;
+	    writer = _writer || _Utils.noop;
 	}
 
 	exports['default'] = {
@@ -1038,8 +1072,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function render() {
 	        var _this = this;
 
-	        var props = this.props,
+	        var className = 'Grid',
+	            mutant = [],
+	            props = this.props,
 	            state = this.state;
+
+	        if (this.props.className) {
+	            className += ' ' + this.props.className;
+	        }
 
 	        var size = this.getLayoutManager().layout(this.state.colsize, this.state.rowsize, this.state.colprecise, this.state.rowprecise, {
 	            colGutterWidth: props.colGutterWidth,
@@ -1056,17 +1096,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var colpos = _size[2];
 	            var rowpos = _size[3];
 
-	            var className = 'Grid',
-	                children = props.children,
-	                mutant = [];
-
 	            // create gutters
 	            if (props.resizable) {
 	                mutant = mutant.concat(this.renderGutters(colpos, rowpos));
 	            }
 
 	            // create panels
-	            _react2['default'].Children.forEach(children, function (c, i) {
+	            _react2['default'].Children.forEach(props.children, function (c, i) {
 	                var x = parseInt(c.props.col),
 	                    y = parseInt(c.props.row),
 	                    key = 'child-' + i;
@@ -1106,13 +1142,121 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(5);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _GutterJsx = __webpack_require__(6);
+
+	var _GutterJsx2 = _interopRequireDefault(_GutterJsx);
+
+	var _Constants = __webpack_require__(2);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _mixinsDimension = __webpack_require__(7);
+
+	var _mixinsDimension2 = _interopRequireDefault(_mixinsDimension);
+
+	var _mixinsPersistentState = __webpack_require__(8);
+
+	var _mixinsPersistentState2 = _interopRequireDefault(_mixinsPersistentState);
+
+	var _mixinsLayoutManager = __webpack_require__(9);
+
+	var Tabs = _react2['default'].createClass({
+	    displayName: 'Tabs',
+
+	    mixins: [_mixinsPersistentState2['default']],
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            curTab: 0
+	        };
+	    },
+
+	    renderTabbar: function renderTabbar(items) {
+	        var _this = this;
+
+	        return items.map(function (tab, i) {
+	            var isActive = i == _this.state.curTab;
+	            var className = 'Tabs-Bar-Item';
+	            if (isActive) {
+	                className += ' active';
+	            }
+	            return _react2['default'].createElement(
+	                'div',
+	                { className: className, 'data-idx': i, key: i, onClick: _this.onTabClick },
+	                _react2['default'].createElement(
+	                    'span',
+	                    null,
+	                    tab.label
+	                )
+	            );
+	        });
+	    },
+
+	    onTabClick: function onTabClick(evt) {
+	        this.setState({
+	            curTab: evt.currentTarget.dataset.idx
+	        });
+	    },
+
+	    render: function render() {
+	        var className = 'Tabs',
+	            props = this.props,
+	            state = this.state;
+
+	        if (this.props.className) {
+	            className += ' ' + props.className;
+	        }
+
+	        var items = [];
+	        _react2['default'].Children.forEach(props.children, function (c, i) {
+	            items[i] = { label: c.props.label, icon: c.props.icon };
+	        });
+
+	        var barItems = this.renderTabbar(items),
+	            content = props.children[state.curTab];
+	        return _react2['default'].createElement(
+	            'div',
+	            { id: this.props.id, className: className },
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'Tabs-Bar' },
+	                barItems
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'Tabs-Content' },
+	                content
+	            )
+	        );
+	    }
+	});
+
+	exports['default'] = Tabs;
+	module.exports = exports['default'];
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(16);
+	var content = __webpack_require__(17);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(18)(content, {});
+	var update = __webpack_require__(19)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1129,21 +1273,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(17)();
+	exports = module.exports = __webpack_require__(18)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".HGroup {\n  display: flex;\n  flex-direction: row; }\n\n.VGroup {\n  display: flex;\n  flex-direction: column; }\n\n.HGroup, .VGroup, .View {\n  flex-basis: 0;\n  flex: 1; }\n\n.Gutter {\n  background-color: #eee; }\n\n.HGroup > .Gutter {\n  width: 4px;\n  min-width: 4px;\n  max-width: 4px; }\n\n.VGroup > .Gutter {\n  height: 4px;\n  min-height: 4px;\n  max-height: 4px; }\n\n.Gutter.ns {\n  cursor: row-resize; }\n\n.Gutter.we {\n  cursor: col-resize; }\n", ""]);
+	exports.push([module.id, ".Tabs > .Tabs-Bar {\n  height: 36px; }\n  .Tabs > .Tabs-Bar a {\n    color: silver; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit {\n    float: right; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.add a,\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit a {\n    color: #333; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item {\n    cursor: default;\n    display: inline-block;\n    padding: 0 20px;\n    position: relative;\n    height: 36px;\n    line-height: 36px;\n    transition: background-color 0.5s; }\n    .Tabs > .Tabs-Bar .Tabs-Bar-Item .closeBtn {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      opacity: 0;\n      visibility: hidden;\n      transition: opacity 0.5s, visibility 0s linear 0.5s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active:after {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    content: '';\n    display: block;\n    height: 3px;\n    background-color: #1675bd; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn {\n    opacity: 1;\n    visibility: visible;\n    transition: opacity 0.5s, visibility 0s linear 0s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn:hover {\n    color: #333; }\n\n.Tabs > .Tabs-Content {\n  height: calc(100% - 36px); }\n  .Tabs > .Tabs-Content .TabContentItem {\n    position: relative;\n    height: 100%;\n    display: none;\n    overflow: hidden; }\n  .Tabs > .Tabs-Content .TabContentItem.active {\n    display: block;\n    background-color: #eee; }\n\n.HGroup {\n  display: flex;\n  flex-direction: row; }\n\n.VGroup {\n  display: flex;\n  flex-direction: column; }\n\n.HGroup, .VGroup, .View {\n  flex-basis: 0;\n  flex: 1; }\n\n.Gutter {\n  background-color: #eee; }\n\n.HGroup > .Gutter {\n  width: 4px;\n  min-width: 4px;\n  max-width: 4px; }\n\n.VGroup > .Gutter {\n  height: 4px;\n  min-height: 4px;\n  max-height: 4px; }\n\n.Gutter.ns {\n  cursor: row-resize; }\n\n.Gutter.we {\n  cursor: col-resize; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	/*
@@ -1199,7 +1343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

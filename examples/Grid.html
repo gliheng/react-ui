@@ -42,13 +42,6 @@
         <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
         <script src="../dist/react-ui.js" charset="utf-8"></script>
         <script type="text/jsx">
-            ReactUI.persistFunc(function(id) {
-                // reader
-                return JSON.parse(localStorage[`Layout-Dimension:${id}`] || '{}');
-            }, function (id, data) {
-                // writer
-                localStorage[`Layout-Dimension:${id}`] = JSON.stringify(data);
-            });
             var app = React.render(
                 <ReactUI.Grid id="grid" rows="3" cols="3" colsize="200px,1,1" rowsize="2,1,2">
                     <ReactUI.View className="a" row="0" col="0">A</ReactUI.View>

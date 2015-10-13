@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ReactUI Tab example</title>
+        <style media="screen">
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+            html, body, #app{
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+            #tab{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            #tab .Tabs-Content {
+                flex: 1;
+            }
+            #tab .Tabs-Content > div {
+                height: 100%;
+            }
+            .a, .b, .c {
+                display: flex;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                font-size: 2em;
+                color: white;
+            }
+            .a {background-color: #6ab12b;}
+            .b {background-color: #8B66FF;}
+            .c {background-color: #E85C62;}
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
+        <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
+        <script src="../dist/react-ui.js" charset="utf-8"></script>
+        <script type="text/jsx">
+            var app = React.render(
+                <ReactUI.Tabs id="tab">
+                    <div className="a" label="tab 1">A</div>
+                    <div className="b" label="tab 2">B</div>
+                    <div className="c" label="tab 3">C</div>
+                </ReactUI.Tabs>,
+                document.getElementById('app')
+            );
+            // ReactUI.bootstrap(app);
+        </script>
+    </body>
+</html>

@@ -90,8 +90,14 @@ let Grid = React.createClass({
     },
 
     render() {
-        var props = this.props,
+        var className = 'Grid',
+            mutant = [],
+            props = this.props,
             state = this.state;
+
+        if (this.props.className) {
+            className += ' ' + this.props.className;
+        }
 
         var size = this.getLayoutManager().layout(
             this.state.colsize,
@@ -109,17 +115,13 @@ let Grid = React.createClass({
         if (size) {
             var [colsize, rowsize, colpos, rowpos] = size;
 
-            var className = 'Grid',
-                children = props.children,
-                mutant = [];
-
             // create gutters
             if (props.resizable) {
                 mutant = mutant.concat(this.renderGutters(colpos, rowpos));
             }
 
             // create panels
-            React.Children.forEach(children, (c, i)=> {
+            React.Children.forEach(props.children, (c, i)=> {
                 var x = parseInt(c.props.col),
                     y = parseInt(c.props.row),
                     key = `child-${i}`;
