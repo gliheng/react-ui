@@ -63,6 +63,17 @@ let Grid = React.createClass({
         this.state.rowprecise = rowprecise;
     },
 
+    componentDidMount() {
+        // To render child components, this one needs to know DOM size
+        var $node = this.getDOMNode();
+        if (!('width' in this.state || 'height' in this.state)) {
+            this.setState({
+                width: $node.clientWidth,
+                height: $node.clientHeight
+            });
+        }
+    },
+
     parseSizeSpec(spec) {
         var size = [],
             precise = [];

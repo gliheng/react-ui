@@ -543,17 +543,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            }
 	            return this.layoutManager;
-	        },
-
-	        componentDidMount: function componentDidMount() {
-	            // To render child components, this one needs to know DOM size
-	            var $node = this.getDOMNode();
-	            if (!('width' in this.state || 'height' in this.state)) {
-	                this.setState({
-	                    width: $node.clientWidth,
-	                    height: $node.clientHeight
-	                });
-	            }
 	        }
 
 	    };
@@ -1018,6 +1007,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.state.colprecise = colprecise;
 	        this.state.rowsize = rowsize;
 	        this.state.rowprecise = rowprecise;
+	    },
+
+	    componentDidMount: function componentDidMount() {
+	        // To render child components, this one needs to know DOM size
+	        var $node = this.getDOMNode();
+	        if (!('width' in this.state || 'height' in this.state)) {
+	            this.setState({
+	                width: $node.clientWidth,
+	                height: $node.clientHeight
+	            });
+	        }
 	    },
 
 	    parseSizeSpec: function parseSizeSpec(spec) {

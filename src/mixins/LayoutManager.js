@@ -20,17 +20,6 @@ function LayoutManagerMixinFactory(type) {
                 }
             }
             return this.layoutManager;
-        },
-        
-        componentDidMount() {
-            // To render child components, this one needs to know DOM size
-            var $node = this.getDOMNode();
-            if (!('width' in this.state || 'height' in this.state)) {
-                this.setState({
-                    width: $node.clientWidth,
-                    height: $node.clientHeight
-                });
-            }
         }
 
     };
