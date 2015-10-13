@@ -2,38 +2,13 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>ReactUI Grid examples</title>
+        <title>ReactUI Grid Demo</title>
+        <link rel="stylesheet" href="styles/style.css" charset="utf-8">
         <style media="screen">
-            html, body {
-                margin: 0;
-                padding: 0;
-            }
-            html, body, #app{
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
             #grid{
                 width: 100%;
                 height: 100%;
             }
-            .a, .b, .c, .d, .e, .f, .g, .h, .i {
-                display: flex;
-                text-align: center;
-                align-items: center;
-                justify-content: center;
-                font-size: 2em;
-                color: white;
-            }
-            .a {background-color: #B0FF7B;}
-            .b {background-color: #51E8E8;}
-            .c {background-color: #5160E8;}
-            .d {background-color: #8B66FF;}
-            .e {background-color: #AF5CE8;}
-            .f {background-color: #E85C62;}
-            .g {background-color: #FFBB41;}
-            .h {background-color: #6ab12b;}
-            .i {background-color: #ff418b;}
         </style>
     </head>
     <body>
@@ -42,18 +17,21 @@
         <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
         <script src="../dist/react-ui.js" charset="utf-8"></script>
         <script type="text/jsx">
+            var Grid = ReactUI.Grid,
+                View = ReactUI.View;
+
             var app = React.render(
-                <ReactUI.Grid id="grid" rows="3" cols="3" colsize="200px,1,1" rowsize="2,1,2">
-                    <ReactUI.View className="a" row="0" col="0">A</ReactUI.View>
-                    <ReactUI.View className="b" row="0" col="1">B</ReactUI.View>
-                    <ReactUI.View className="c" row="0" col="2">C</ReactUI.View>
-                    <ReactUI.View className="d" row="1" col="0">D</ReactUI.View>
-                    <ReactUI.View className="e" row="1" col="1">E</ReactUI.View>
-                    <ReactUI.View className="f" row="1" col="2">F</ReactUI.View>
-                    <ReactUI.View className="g" row="2" col="0">G</ReactUI.View>
-                    <ReactUI.View className="h" row="2" col="1">H</ReactUI.View>
-                    <ReactUI.View className="i" row="2" col="2">I</ReactUI.View>
-                </ReactUI.Grid>,
+                <Grid id="grid" rows="3" cols="3" colsize="200px,1,1" rowsize="2,1,2">
+                    <View className="a" row="0" col="0">A</View>
+                    <View className="b" row="0" col="1">B</View>
+                    <View className="c" row="0" col="2">C</View>
+                    <View className="d" row="1" col="0">D</View>
+                    <View className="e" row="1" col="1">E</View>
+                    <View className="f" row="1" col="2">F</View>
+                    <View className="g" row="2" col="0">G</View>
+                    <View className="h" row="2" col="1">H</View>
+                    <View className="i" row="2" col="2">I</View>
+                </Grid>,
                 document.getElementById('app')
             );
             ReactUI.bootstrap(app);

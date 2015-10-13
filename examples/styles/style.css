@@ -1,0 +1,27 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+html, body, #app{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.a, .b, .c, .d, .e, .f, .g, .h, .i {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: white;
+}
+.a {background-color: #B0FF7B;}
+.b {background-color: #51E8E8;}
+.c {background-color: #5160E8;}
+.d {background-color: #8B66FF;}
+.e {background-color: #AF5CE8;}
+.f {background-color: #E85C62;}
+.g {background-color: #FFBB41;}
+.h {background-color: #6ab12b;}
+.i {background-color: #ff418b;}

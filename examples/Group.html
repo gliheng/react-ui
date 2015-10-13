@@ -2,37 +2,13 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>ReactUI HGroup VGroup examples</title>
+        <title>ReactUI Group Demo</title>
+        <link rel="stylesheet" href="styles/style.css" charset="utf-8">
         <style media="screen">
-            html, body {
-                margin: 0;
-                padding: 0;
-            }
-            html, body, #app{
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-            }
             #group {
                 width: 100%;
                 height: 100%;
             }
-            .a, .b, .c, .d, .e, .f, .g {
-                display: flex;
-                text-align: center;
-                align-items: center;
-                justify-content: center;
-                font-size: 2em;
-                color: white;
-            }
-            .a {background-color: #B0FF7B;}
-            .b {background-color: #51E8E8;}
-            .c {background-color: #5160E8;}
-            .d {background-color: #8B66FF;}
-            .e {background-color: #AF5CE8;}
-            .f {background-color: #E85C62;}
-            .g {background-color: #FFBB41;}
-
         </style>
     </head>
     <body>
@@ -41,22 +17,26 @@
         <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
         <script src="../dist/react-ui.js" charset="utf-8"></script>
         <script type="text/jsx">
+            var VGroup = ReactUI.VGroup,
+                HGroup = ReactUI.HGroup,
+                View = ReactUI.View;
+
             var app = React.render(
-                <ReactUI.VGroup id="group">
-                    <ReactUI.HGroup flex={2}>
-                        <ReactUI.View className="a" width={400}>left</ReactUI.View>
-                        <ReactUI.VGroup resizable={true}>
-                            <ReactUI.View className="b">top of middle</ReactUI.View>
-                            <ReactUI.HGroup resizable={false}>
-                                <ReactUI.View className="c">bottom of middle</ReactUI.View>
-                                <ReactUI.View className="d">bottom of middle</ReactUI.View>
-                                <ReactUI.View className="e">bottom of middle</ReactUI.View>
-                            </ReactUI.HGroup>
-                        </ReactUI.VGroup>
-                        <ReactUI.View className="f" width={200}>right</ReactUI.View>
-                    </ReactUI.HGroup>
-                    <ReactUI.View className="g">bottom</ReactUI.View>
-                </ReactUI.VGroup>,
+                <VGroup id="group">
+                    <HGroup flex={2}>
+                        <View className="a" width={400}>left</View>
+                        <VGroup resizable={true}>
+                            <View className="b">top of middle</View>
+                            <HGroup resizable={false}>
+                                <View className="c">bottom of middle</View>
+                                <View className="d">bottom of middle</View>
+                                <View className="e">bottom of middle</View>
+                            </HGroup>
+                        </VGroup>
+                        <View className="f" width={200}>right</View>
+                    </HGroup>
+                    <View className="g">bottom</View>
+                </VGroup>,
                 document.getElementById('app')
             );
             ReactUI.bootstrap(app);

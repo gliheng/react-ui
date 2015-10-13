@@ -1,3 +1,4 @@
+import React from 'react';
 import {noop, clone, exclude} from '../Utils';
 
 var reader = noop;
@@ -32,12 +33,12 @@ export default {
     putState(state) {
         var children = this.props.children,
             childrenState = state.children;
-        if (childrenState && Array.isArray(children)) {
-            children.forEach((c, i)=> {
+
+        if (childrenState) {
+            React.Children.forEach(children, (c, i)=> {
                 var child = this.refs['child-' + i];
                 if (child === undefined) {
                     // this case may happen, if the component's children is not rendered
-                    // since it does not have a width or height in Grid component
 
                     // console.error('Can\' find component to apply state');
                     return;
@@ -46,7 +47,11 @@ export default {
             });
         }
         // console.log(this.getDOMNode(), exclude(state, 'children'));
-        this.setState(exclude(state, 'children'));
+        this.setState(exclude(state, 'children'), ()=>{
+            if (typeof this.stateRestored == 'function') {
+                this.stateRestored();
+            }
+        });
     },
 
     /* get state from component then persist the state info

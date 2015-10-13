@@ -11,8 +11,8 @@ var defaults = {
     persistState: true,
     persistFunc: function () {
         return [
-            (id)=> JSON.parse(localStorage[`Layout-Dimension:${id}`] || '{}'),
-            (id, data)=> localStorage[`Layout-Dimension:${id}`] = JSON.stringify(data)
+            (id)=> JSON.parse(localStorage[`ui-persist:${id}`] || '{}'),
+            (id, data)=> localStorage[`ui-persist:${id}`] = JSON.stringify(data)
         ];
     }
 };

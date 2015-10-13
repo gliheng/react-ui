@@ -92,9 +92,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    persistState: true,
 	    persistFunc: function persistFunc() {
 	        return [function (id) {
-	            return JSON.parse(localStorage['Layout-Dimension:' + id] || '{}');
+	            return JSON.parse(localStorage['ui-persist:' + id] || '{}');
 	        }, function (id, data) {
-	            return localStorage['Layout-Dimension:' + id] = JSON.stringify(data);
+	            return localStorage['ui-persist:' + id] = JSON.stringify(data);
 	        }];
 	    }
 	};
@@ -492,12 +492,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var children = this.props.children,
 	            childrenState = state.children;
-	        if (childrenState && Array.isArray(children)) {
-	            children.forEach(function (c, i) {
+
+	        if (childrenState) {
+	            React.Children.forEach(children, function (c, i) {
 	                var child = _this2.refs['child-' + i];
 	                if (child === undefined) {
 	                    // this case may happen, if the component's children is not rendered
-	                    // since it does not have a width or height in Grid component
 
 	                    // console.error('Can\' find component to apply state');
 	                    return;
@@ -506,7 +506,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 	        // console.log(this.getDOMNode(), exclude(state, 'children'));
-	        this.setState((0, _Utils.exclude)(state, 'children'));
+	        this.setState((0, _Utils.exclude)(state, 'children'), function () {
+	            if (typeof _this2.stateRestored == 'function') {
+	                _this2.stateRestored();
+	            }
+	        });
 	    },
 
 	    /* get state from component then persist the state info
@@ -1205,9 +1209,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    onTabClick: function onTabClick(evt) {
+	        var _this2 = this;
+
+	        var idx = evt.currentTarget.dataset.idx;
 	        this.setState({
-	            curTab: evt.currentTarget.dataset.idx
+	            curTab: idx
+	        }, function () {
+	            _this2.saveState();
+	            if (typeof _this2.props.indexChanged == 'function') {
+	                _this2.props.indexChanged(idx);
+	            }
+
+	            _this2.restoreContentState();
 	        });
+	    },
+
+	    restoreContentState: function restoreContentState() {
+	        // restore grid or group state
+	        var content = this.refs.activeContent;
+	        if (typeof content.restoreState == 'function') {
+	            content.restoreState();
+	        }
+	    },
+
+	    // PersistentState mixin hook
+	    stateRestored: function stateRestored() {
+	        this.restoreContentState();
+	    },
+
+	    componentDidMount: function componentDidMount() {
+	        this.restoreContentState();
 	    },
 
 	    render: function render() {
@@ -1225,7 +1256,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        var barItems = this.renderTabbar(items),
-	            content = props.children[state.curTab];
+	            content = _react2['default'].addons.cloneWithProps(props.children[state.curTab], {
+	            ref: 'activeContent'
+	        });
 	        return _react2['default'].createElement(
 	            'div',
 	            { id: this.props.id, className: className },

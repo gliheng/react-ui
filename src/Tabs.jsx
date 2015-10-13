@@ -26,9 +26,34 @@ let Tabs = React.createClass({
     },
 
     onTabClick(evt) {
+        var idx = evt.currentTarget.dataset.idx;
         this.setState({
-            curTab: evt.currentTarget.dataset.idx
+            curTab: idx
+        }, ()=> {
+            this.saveState();
+            if (typeof this.props.indexChanged == 'function') {
+                this.props.indexChanged(idx);
+            }
+
+            this.restoreContentState();
         });
+    },
+
+    restoreContentState() {
+        // restore grid or group state
+        var content = this.refs.activeContent;
+        if (typeof content.restoreState == 'function') {
+            content.restoreState();
+        }
+    },
+
+    // PersistentState mixin hook
+    stateRestored() {
+        this.restoreContentState();
+    },
+
+    componentDidMount() {
+        this.restoreContentState();
     },
 
     render() {
@@ -46,7 +71,9 @@ let Tabs = React.createClass({
         });
 
         var barItems = this.renderTabbar(items),
-            content = props.children[state.curTab];
+            content = React.addons.cloneWithProps(props.children[state.curTab], {
+                ref: 'activeContent'
+            });
         return (
             <div id={this.props.id} className={className}>
                 <div className="Tabs-Bar">{barItems}</div>
