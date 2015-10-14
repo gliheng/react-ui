@@ -2,12 +2,13 @@ import React from 'react';
 import Constants from './Constants';
 import Gutter from './Gutter.jsx';
 import DimensionMixin from './mixins/Dimension';
+import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
 import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
 
 let groupFactory = function (type, elementName) {
     return React.createClass({
-        mixins: [LayoutManagerMixinFactory(type), DimensionMixin, PersistentStateMixin],
+        mixins: [LayoutManagerMixinFactory(type), DimensionMixin, ResponsiveMixin, PersistentStateMixin],
 
         render() {
             var className = elementName,
@@ -28,9 +29,9 @@ let groupFactory = function (type, elementName) {
                 if (this.props.resizable) {
                     if (i != children.length - 1) {
                         var className;
-                        if (type == Constants.HGROUP) {
+                        if (type == Constants.Types.HGROUP) {
                             className = 'we';
-                        } else if (type == Constants.VGROUP) {
+                        } else if (type == Constants.Types.VGROUP) {
                             className = 'ns';
                         }
                         mutant.push(<Gutter className={className} key={'gutter-' + i} getLayoutManager={this.getLayoutManager} idx={i}></Gutter>);

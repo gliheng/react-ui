@@ -20,10 +20,10 @@ class GroupLayoutManager {
     }
 
     moveResize(x, y) {
-        if (this.type == Constants.HGROUP) {
+        if (this.type == Constants.Types.HGROUP) {
             var p = 'width';
             var v = x;
-        } else if (this.type == Constants.VGROUP) {
+        } else if (this.type == Constants.Types.VGROUP) {
             var p = 'height';
             var v = y;
         } else {

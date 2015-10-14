@@ -82,4 +82,4 @@ Check out the examples directory
 
 # TODO
 minWidth maxWidth for HGroup and Grid
-Grid need to persist size and position
+when comp is resized, persistent state does not work well

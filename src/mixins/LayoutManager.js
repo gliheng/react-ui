@@ -13,9 +13,9 @@ function LayoutManagerMixinFactory(type) {
 
         getLayoutManager() {
             if (!this.layoutManager) {
-                if (type == Constants.GRID) {
+                if (type == Constants.Types.GRID) {
                     this.layoutManager = new GridLayoutManager(this);
-                } else if (type == Constants.HGROUP || type == Constants.VGROUP){
+                } else if (type == Constants.Types.HGROUP || type == Constants.Types.VGROUP){
                     this.layoutManager = new GroupLayoutManager(this, type);
                 }
             }

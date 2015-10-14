@@ -14,8 +14,8 @@ class GridLayoutManager {
 
         this.config = config;
 
-        var pxColsize = this.calcSize(width, config.colGutterWidth, config.cols, colsize, colprecise);
-        var pxRowsize = this.calcSize(height, config.rowGutterWidth, config.rows, rowsize, rowprecise);
+        var pxColsize = this.calcSize(width, config.gutterWidth, config.cols, colsize, colprecise);
+        var pxRowsize = this.calcSize(height, config.gutterWidth, config.rows, rowsize, rowprecise);
         var [colpos, rowpos] = this.calcPos(pxColsize, pxRowsize);
         // these are col and row size in pixels
         this.pxColsize = pxColsize;
@@ -29,14 +29,14 @@ class GridLayoutManager {
         d = 0;
         var colpos = colsize.map((size, i)=> {
             var p = d;
-            d = p + size + this.config.colGutterWidth;
+            d = p + size + this.config.gutterWidth;
             return p;
         });
 
         d = 0;
         var rowpos = rowsize.map((size, i)=> {
             var p = d;
-            d = p + size + this.config.rowGutterWidth;
+            d = p + size + this.config.gutterWidth;
             return p;
         });
         return [colpos, rowpos];

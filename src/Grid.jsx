@@ -2,16 +2,16 @@ import React from 'react';
 import Gutter from './Gutter.jsx';
 import Constants from './Constants';
 import DimensionMixin from './mixins/Dimension';
+import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
 import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
 
 let Grid = React.createClass({
-    mixins: [LayoutManagerMixinFactory(Constants.GRID), DimensionMixin, PersistentStateMixin],
+    mixins: [LayoutManagerMixinFactory(Constants.Types.GRID), ResponsiveMixin, DimensionMixin, PersistentStateMixin],
 
     getDefaultProps() {
         return {
-            colGutterWidth: 5,
-            rowGutterWidth: 5
+            gutterWidth: Constants.config.gutterWidth,
         };
     },
 
@@ -27,9 +27,9 @@ let Grid = React.createClass({
             let key = 'gutter-' + idx;
             let style = {
                 position: 'absolute',
-                left: colpos[i+1] - this.props.colGutterWidth,
+                left: colpos[i+1] - this.props.gutterWidth,
                 top: 0,
-                width: this.props.colGutterWidth,
+                width: this.props.gutterWidth,
                 height: '100%'
             };
             gutters.push(<Gutter className="we" key={key} ref={key} style={style} getLayoutManager={this.getLayoutManager} idx={idx++}></Gutter>);
@@ -41,9 +41,9 @@ let Grid = React.createClass({
             let style = {
                 position: 'absolute',
                 left: 0,
-                top: rowpos[i+1] - this.props.rowGutterWidth,
+                top: rowpos[i+1] - this.props.gutterWidth,
                 width: '100%',
-                height: this.props.rowGutterWidth
+                height: this.props.gutterWidth
             };
             gutters.push(<Gutter className="ns" key={key} ref={key} style={style} getLayoutManager={this.getLayoutManager} idx={idx++}></Gutter>);
         }
@@ -72,6 +72,18 @@ let Grid = React.createClass({
                 height: $node.clientHeight
             });
         }
+    },
+
+    onResized() {
+        var $node = this.getDOMNode();
+        this.setState({
+            width: $node.clientWidth,
+            height: $node.clientHeight
+        });
+    },
+
+    stateRestored() {
+        this.resize();
     },
 
     parseSizeSpec(spec) {
@@ -104,8 +116,8 @@ let Grid = React.createClass({
             this.state.rowsize,
             this.state.colprecise,
             this.state.rowprecise, {
-                colGutterWidth: props.colGutterWidth,
-                rowGutterWidth: props.rowGutterWidth,
+                gutterWidth: props.gutterWidth,
+                gutterWidth: props.gutterWidth,
                 cols: parseInt(props.cols),
                 rows: parseInt(props.rows)
             },
@@ -142,12 +154,12 @@ let Grid = React.createClass({
             });
         }
 
-        var style = {
-            width: state.width,
-            height: state.height
-        };
+        // var style = {
+        //     width: state.width,
+        //     height: state.height
+        // };
         return (
-            <div id={props.id} className={className} style={style}>{mutant}</div>
+            <div id={props.id} className={className}>{mutant}</div>
         );
     }
 });

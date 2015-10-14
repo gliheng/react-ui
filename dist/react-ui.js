@@ -64,51 +64,44 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _HGroupJsx = __webpack_require__(1);
+	var _ConstantsJs = __webpack_require__(1);
+
+	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
+
+	var _HGroupJsx = __webpack_require__(3);
 
 	var _HGroupJsx2 = _interopRequireDefault(_HGroupJsx);
 
-	var _VGroupJsx = __webpack_require__(12);
+	var _VGroupJsx = __webpack_require__(13);
 
 	var _VGroupJsx2 = _interopRequireDefault(_VGroupJsx);
 
-	var _ViewJsx = __webpack_require__(13);
+	var _ViewJsx = __webpack_require__(14);
 
 	var _ViewJsx2 = _interopRequireDefault(_ViewJsx);
 
-	var _GridJsx = __webpack_require__(14);
+	var _GridJsx = __webpack_require__(15);
 
 	var _GridJsx2 = _interopRequireDefault(_GridJsx);
 
-	var _TabsJsx = __webpack_require__(15);
+	var _TabsJsx = __webpack_require__(16);
 
 	var _TabsJsx2 = _interopRequireDefault(_TabsJsx);
 
-	var _mixinsPersistentState = __webpack_require__(8);
+	var _mixinsPersistentState = __webpack_require__(9);
 
-	__webpack_require__(16);
-
-	var defaults = {
-	    persistState: true,
-	    persistFunc: function persistFunc() {
-	        return [function (id) {
-	            return JSON.parse(localStorage['ui-persist:' + id] || '{}');
-	        }, function (id, data) {
-	            return localStorage['ui-persist:' + id] = JSON.stringify(data);
-	        }];
-	    }
-	};
+	__webpack_require__(17);
 
 	function config(_config) {
-	    Object.assign(defaults, _config);
+	    Object.assign(_ConstantsJs2['default'].config, _config);
 
-	    if (defaults.persistState) {
-	        var _defaults$persistFunc = defaults.persistFunc();
+	    if (_ConstantsJs2['default'].config.persistState) {
+	        var _Constants$config$persistFunc = _ConstantsJs2['default'].config.persistFunc();
 
-	        var _defaults$persistFunc2 = _slicedToArray(_defaults$persistFunc, 2);
+	        var _Constants$config$persistFunc2 = _slicedToArray(_Constants$config$persistFunc, 2);
 
-	        var reader = _defaults$persistFunc2[0];
-	        var writer = _defaults$persistFunc2[1];
+	        var reader = _Constants$config$persistFunc2[0];
+	        var writer = _Constants$config$persistFunc2[1];
 
 	        (0, _mixinsPersistentState.setReader)(reader);
 	        (0, _mixinsPersistentState.setWriter)(writer);
@@ -122,11 +115,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function bootstrap(app) {
 	    function resize() {
-	        var $node = app.getDOMNode().parentNode;
-	        app.setState({
-	            width: $node.clientWidth,
-	            height: $node.clientHeight
-	        });
+	        var $node = app.getDOMNode();
+	        app.resize($node.clientWidth, $node.clientHeight);
 	    }
 
 	    window.addEventListener('resize', function () {
@@ -154,38 +144,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
-	  value: true
+	    value: true
 	});
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _Utils = __webpack_require__(2);
 
-	var _Constants = __webpack_require__(2);
+	exports['default'] = {
+	    Types: (0, _Utils.enums)(['HGROUP', 'VGROUP', 'GRID']),
 
-	var _Constants2 = _interopRequireDefault(_Constants);
-
-	var _GroupBaseJsx = __webpack_require__(4);
-
-	var HGroup = (0, _GroupBaseJsx.groupFactory)(_Constants2['default'].HGROUP, 'HGroup');
-	exports['default'] = HGroup;
+	    config: {
+	        gutterWidth: 4,
+	        persistState: true,
+	        persistFunc: function persistFunc() {
+	            return [function (id) {
+	                return JSON.parse(localStorage['ui-persist:' + id] || '{}');
+	            }, function (id, data) {
+	                return localStorage['ui-persist:' + id] = JSON.stringify(data);
+	            }];
+	        }
+	    }
+	};
 	module.exports = exports['default'];
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-
-	var _Utils = __webpack_require__(3);
-
-	exports['default'] = (0, _Utils.enums)(['HGROUP', 'VGROUP', 'GRID']);
-	module.exports = exports['default'];
-
-/***/ },
-/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -252,6 +234,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _Constants = __webpack_require__(1);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _GroupBaseJsx = __webpack_require__(4);
+
+	var HGroup = (0, _GroupBaseJsx.groupFactory)(_Constants2['default'].Types.HGROUP, 'HGroup');
+	exports['default'] = HGroup;
+	module.exports = exports['default'];
+
+/***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -267,7 +271,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
@@ -279,15 +283,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mixinsDimension2 = _interopRequireDefault(_mixinsDimension);
 
-	var _mixinsPersistentState = __webpack_require__(8);
+	var _mixinsResponsive = __webpack_require__(8);
+
+	var _mixinsResponsive2 = _interopRequireDefault(_mixinsResponsive);
+
+	var _mixinsPersistentState = __webpack_require__(9);
 
 	var _mixinsPersistentState2 = _interopRequireDefault(_mixinsPersistentState);
 
-	var _mixinsLayoutManager = __webpack_require__(9);
+	var _mixinsLayoutManager = __webpack_require__(10);
 
 	var groupFactory = function groupFactory(type, elementName) {
 	    return _react2['default'].createClass({
-	        mixins: [(0, _mixinsLayoutManager.LayoutManagerMixinFactory)(type), _mixinsDimension2['default'], _mixinsPersistentState2['default']],
+	        mixins: [(0, _mixinsLayoutManager.LayoutManagerMixinFactory)(type), _mixinsDimension2['default'], _mixinsResponsive2['default'], _mixinsPersistentState2['default']],
 
 	        render: function render() {
 	            var _this = this;
@@ -310,9 +318,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (_this.props.resizable) {
 	                    if (i != children.length - 1) {
 	                        var className;
-	                        if (type == _Constants2['default'].HGROUP) {
+	                        if (type == _Constants2['default'].Types.HGROUP) {
 	                            className = 'we';
-	                        } else if (type == _Constants2['default'].VGROUP) {
+	                        } else if (type == _Constants2['default'].Types.VGROUP) {
 	                            className = 'ns';
 	                        }
 	                        mutant.push(_react2['default'].createElement(_GutterJsx2['default'], { className: className, key: 'gutter-' + i, getLayoutManager: _this.getLayoutManager, idx: i }));
@@ -442,6 +450,28 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	exports['default'] = {
+	    resize: function resize(width, height) {
+	        if (typeof this.onResized == 'function') {
+	            this.onResized();
+	        }
+	        for (var key in this.refs) {
+	            var c = this.refs[key];
+	            if (typeof c.resize == 'function') c.resize(width, height);
+	        }
+	    }
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -452,7 +482,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.setReader = setReader;
 	exports.setWriter = setWriter;
 
-	var _Utils = __webpack_require__(3);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _react = __webpack_require__(5);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Utils = __webpack_require__(2);
 
 	var reader = _Utils.noop;
 
@@ -494,7 +530,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            childrenState = state.children;
 
 	        if (childrenState) {
-	            React.Children.forEach(children, function (c, i) {
+	            _react2['default'].Children.forEach(children, function (c, i) {
 	                var child = _this2.refs['child-' + i];
 	                if (child === undefined) {
 	                    // this case may happen, if the component's children is not rendered
@@ -519,7 +555,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var id = this.props.id;
 	        // only component with id attribute can save state
 	        if (!id) {
-	            throw new Error('Only component with id attribute can save state');
+	            console.warn('Only component with id attribute can save state');
+	            return;
 	        }
 	        var s = this.getState(true);
 	        writer(id, s);
@@ -530,7 +567,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    restoreState: function restoreState() {
 	        var id = this.props.id;
 	        if (!id) {
-	            throw new Error('Only component with id attribute can save state');
+	            console.warn('Only component with id attribute can save state');
+	            return;
 	        }
 	        var state = reader(id);
 	        if (state) {
@@ -541,7 +579,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -552,15 +590,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
-	var _GroupLayoutManager = __webpack_require__(10);
+	var _GroupLayoutManager = __webpack_require__(11);
 
 	var _GroupLayoutManager2 = _interopRequireDefault(_GroupLayoutManager);
 
-	var _GridLayoutManager = __webpack_require__(11);
+	var _GridLayoutManager = __webpack_require__(12);
 
 	var _GridLayoutManager2 = _interopRequireDefault(_GridLayoutManager);
 
@@ -574,9 +612,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        getLayoutManager: function getLayoutManager() {
 	            if (!this.layoutManager) {
-	                if (type == _Constants2['default'].GRID) {
+	                if (type == _Constants2['default'].Types.GRID) {
 	                    this.layoutManager = new _GridLayoutManager2['default'](this);
-	                } else if (type == _Constants2['default'].HGROUP || type == _Constants2['default'].VGROUP) {
+	                } else if (type == _Constants2['default'].Types.HGROUP || type == _Constants2['default'].Types.VGROUP) {
 	                    this.layoutManager = new _GroupLayoutManager2['default'](this, type);
 	                }
 	            }
@@ -589,7 +627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.LayoutManagerMixinFactory = LayoutManagerMixinFactory;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -606,11 +644,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
-	var _Utils = __webpack_require__(3);
+	var _Utils = __webpack_require__(2);
 
 	var GroupLayoutManager = (function () {
 	    function GroupLayoutManager(parent, type) {
@@ -635,10 +673,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	        key: 'moveResize',
 	        value: function moveResize(x, y) {
-	            if (this.type == _Constants2['default'].HGROUP) {
+	            if (this.type == _Constants2['default'].Types.HGROUP) {
 	                var p = 'width';
 	                var v = x;
-	            } else if (this.type == _Constants2['default'].VGROUP) {
+	            } else if (this.type == _Constants2['default'].Types.VGROUP) {
 	                var p = 'height';
 	                var v = y;
 	            } else {
@@ -689,7 +727,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -708,11 +746,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
-	var _Utils = __webpack_require__(3);
+	var _Utils = __webpack_require__(2);
 
 	var GridLayoutManager = (function () {
 	    function GridLayoutManager(parent) {
@@ -730,8 +768,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            this.config = config;
 
-	            var pxColsize = this.calcSize(width, config.colGutterWidth, config.cols, colsize, colprecise);
-	            var pxRowsize = this.calcSize(height, config.rowGutterWidth, config.rows, rowsize, rowprecise);
+	            var pxColsize = this.calcSize(width, config.gutterWidth, config.cols, colsize, colprecise);
+	            var pxRowsize = this.calcSize(height, config.gutterWidth, config.rows, rowsize, rowprecise);
 
 	            var _calcPos = this.calcPos(pxColsize, pxRowsize);
 
@@ -755,14 +793,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            d = 0;
 	            var colpos = colsize.map(function (size, i) {
 	                var p = d;
-	                d = p + size + _this.config.colGutterWidth;
+	                d = p + size + _this.config.gutterWidth;
 	                return p;
 	            });
 
 	            d = 0;
 	            var rowpos = rowsize.map(function (size, i) {
 	                var p = d;
-	                d = p + size + _this.config.rowGutterWidth;
+	                d = p + size + _this.config.gutterWidth;
 	                return p;
 	            });
 	            return [colpos, rowpos];
@@ -864,7 +902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -875,18 +913,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
 	var _GroupBaseJsx = __webpack_require__(4);
 
-	var VGroup = (0, _GroupBaseJsx.groupFactory)(_Constants2['default'].VGROUP, 'VGroup');
+	var VGroup = (0, _GroupBaseJsx.groupFactory)(_Constants2['default'].Types.VGROUP, 'VGroup');
 	exports['default'] = VGroup;
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -905,7 +943,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mixinsDimension2 = _interopRequireDefault(_mixinsDimension);
 
-	var _mixinsPersistentState = __webpack_require__(8);
+	var _mixinsPersistentState = __webpack_require__(9);
 
 	var _mixinsPersistentState2 = _interopRequireDefault(_mixinsPersistentState);
 
@@ -940,7 +978,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -961,7 +999,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _GutterJsx2 = _interopRequireDefault(_GutterJsx);
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
@@ -969,21 +1007,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mixinsDimension2 = _interopRequireDefault(_mixinsDimension);
 
-	var _mixinsPersistentState = __webpack_require__(8);
+	var _mixinsResponsive = __webpack_require__(8);
+
+	var _mixinsResponsive2 = _interopRequireDefault(_mixinsResponsive);
+
+	var _mixinsPersistentState = __webpack_require__(9);
 
 	var _mixinsPersistentState2 = _interopRequireDefault(_mixinsPersistentState);
 
-	var _mixinsLayoutManager = __webpack_require__(9);
+	var _mixinsLayoutManager = __webpack_require__(10);
 
 	var Grid = _react2['default'].createClass({
 	    displayName: 'Grid',
 
-	    mixins: [(0, _mixinsLayoutManager.LayoutManagerMixinFactory)(_Constants2['default'].GRID), _mixinsDimension2['default'], _mixinsPersistentState2['default']],
+	    mixins: [(0, _mixinsLayoutManager.LayoutManagerMixinFactory)(_Constants2['default'].Types.GRID), _mixinsResponsive2['default'], _mixinsDimension2['default'], _mixinsPersistentState2['default']],
 
 	    getDefaultProps: function getDefaultProps() {
 	        return {
-	            colGutterWidth: 5,
-	            rowGutterWidth: 5
+	            gutterWidth: _Constants2['default'].config.gutterWidth
 	        };
 	    },
 
@@ -999,9 +1040,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var key = 'gutter-' + idx;
 	            var style = {
 	                position: 'absolute',
-	                left: colpos[i + 1] - this.props.colGutterWidth,
+	                left: colpos[i + 1] - this.props.gutterWidth,
 	                top: 0,
-	                width: this.props.colGutterWidth,
+	                width: this.props.gutterWidth,
 	                height: '100%'
 	            };
 	            gutters.push(_react2['default'].createElement(_GutterJsx2['default'], { className: 'we', key: key, ref: key, style: style, getLayoutManager: this.getLayoutManager, idx: idx++ }));
@@ -1013,9 +1054,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var style = {
 	                position: 'absolute',
 	                left: 0,
-	                top: rowpos[i + 1] - this.props.rowGutterWidth,
+	                top: rowpos[i + 1] - this.props.gutterWidth,
 	                width: '100%',
-	                height: this.props.rowGutterWidth
+	                height: this.props.gutterWidth
 	            };
 	            gutters.push(_react2['default'].createElement(_GutterJsx2['default'], { className: 'ns', key: key, ref: key, style: style, getLayoutManager: this.getLayoutManager, idx: idx++ }));
 	        }
@@ -1058,6 +1099,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    },
 
+	    onResized: function onResized() {
+	        var $node = this.getDOMNode();
+	        this.setState({
+	            width: $node.clientWidth,
+	            height: $node.clientHeight
+	        });
+	    },
+
+	    stateRestored: function stateRestored() {
+	        this.resize();
+	    },
+
 	    parseSizeSpec: function parseSizeSpec(spec) {
 	        var size = [],
 	            precise = [];
@@ -1086,8 +1139,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        var size = this.getLayoutManager().layout(this.state.colsize, this.state.rowsize, this.state.colprecise, this.state.rowprecise, {
-	            colGutterWidth: props.colGutterWidth,
-	            rowGutterWidth: props.rowGutterWidth,
+	            gutterWidth: props.gutterWidth,
+	            gutterWidth: props.gutterWidth,
 	            cols: parseInt(props.cols),
 	            rows: parseInt(props.rows)
 	        }, state.width, state.height);
@@ -1127,13 +1180,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            });
 	        }
 
-	        var style = {
-	            width: state.width,
-	            height: state.height
-	        };
+	        // var style = {
+	        //     width: state.width,
+	        //     height: state.height
+	        // };
 	        return _react2['default'].createElement(
 	            'div',
-	            { id: props.id, className: className, style: style },
+	            { id: props.id, className: className },
 	            mutant
 	        );
 	    }
@@ -1143,7 +1196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1162,7 +1215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _GutterJsx2 = _interopRequireDefault(_GutterJsx);
 
-	var _Constants = __webpack_require__(2);
+	var _Constants = __webpack_require__(1);
 
 	var _Constants2 = _interopRequireDefault(_Constants);
 
@@ -1170,16 +1223,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mixinsDimension2 = _interopRequireDefault(_mixinsDimension);
 
-	var _mixinsPersistentState = __webpack_require__(8);
+	var _mixinsResponsive = __webpack_require__(8);
+
+	var _mixinsResponsive2 = _interopRequireDefault(_mixinsResponsive);
+
+	var _mixinsPersistentState = __webpack_require__(9);
 
 	var _mixinsPersistentState2 = _interopRequireDefault(_mixinsPersistentState);
 
-	var _mixinsLayoutManager = __webpack_require__(9);
+	var _mixinsLayoutManager = __webpack_require__(10);
 
 	var Tabs = _react2['default'].createClass({
 	    displayName: 'Tabs',
 
-	    mixins: [_mixinsPersistentState2['default']],
+	    mixins: [_mixinsPersistentState2['default'], _mixinsResponsive2['default']],
 
 	    getInitialState: function getInitialState() {
 	        return {
@@ -1228,7 +1285,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // restore grid or group state
 	        var content = this.refs.activeContent;
 	        if (typeof content.restoreState == 'function') {
-	            content.restoreState();
+	            content.restoreState(function () {
+	                if (typeof content.resize == 'function') {
+	                    content.resize();
+	                }
+	            });
 	        }
 	    },
 
@@ -1280,16 +1341,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(17);
+	var content = __webpack_require__(18);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(19)(content, {});
+	var update = __webpack_require__(20)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1306,10 +1367,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(18)();
+	exports = module.exports = __webpack_require__(19)();
 	// imports
 
 
@@ -1320,7 +1381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	/*
@@ -1376,7 +1437,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

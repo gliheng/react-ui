@@ -1,3 +1,4 @@
+import Constants from './Constants.js';
 import HGroup from './HGroup.jsx';
 import VGroup from './VGroup.jsx';
 import View from './View.jsx';
@@ -7,21 +8,11 @@ import {setReader, setWriter} from './mixins/PersistentState';
 
 require('./styles/style.scss');
 
-var defaults = {
-    persistState: true,
-    persistFunc: function () {
-        return [
-            (id)=> JSON.parse(localStorage[`ui-persist:${id}`] || '{}'),
-            (id, data)=> localStorage[`ui-persist:${id}`] = JSON.stringify(data)
-        ];
-    }
-};
-
 function config(_config) {
-    Object.assign(defaults, _config);
+    Object.assign(Constants.config, _config);
 
-    if (defaults.persistState) {
-        let [reader, writer] = defaults.persistFunc();
+    if (Constants.config.persistState) {
+        let [reader, writer] = Constants.config.persistFunc();
         setReader(reader);
         setWriter(writer);
     } else {
@@ -34,11 +25,8 @@ config();
 
 function bootstrap(app) {
     function resize() {
-        var $node = app.getDOMNode().parentNode;
-        app.setState({
-            width: $node.clientWidth,
-            height: $node.clientHeight
-        });
+        var $node = app.getDOMNode();
+        app.resize($node.clientWidth, $node.clientHeight);
     }
 
     window.addEventListener('resize', function() {

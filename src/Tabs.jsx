@@ -2,11 +2,12 @@ import React from 'react';
 import Gutter from './Gutter.jsx';
 import Constants from './Constants';
 import DimensionMixin from './mixins/Dimension';
+import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
 import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
 
 let Tabs = React.createClass({
-    mixins: [PersistentStateMixin],
+    mixins: [PersistentStateMixin, ResponsiveMixin],
 
     getInitialState: function () {
         return {
@@ -43,7 +44,11 @@ let Tabs = React.createClass({
         // restore grid or group state
         var content = this.refs.activeContent;
         if (typeof content.restoreState == 'function') {
-            content.restoreState();
+            content.restoreState(()=>{
+                if (typeof content.resize == 'function') {
+                    content.resize()
+                }
+            });
         }
     },
 

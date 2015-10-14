@@ -60,7 +60,8 @@ export default {
         var id = this.props.id;
         // only component with id attribute can save state
         if (!id) {
-            throw new Error('Only component with id attribute can save state');
+            console.warn('Only component with id attribute can save state');
+            return;
         }
         var s = this.getState(true);
         writer(id, s);
@@ -71,7 +72,8 @@ export default {
     restoreState() {
         var id = this.props.id;
         if (!id) {
-            throw new Error('Only component with id attribute can save state');
+            console.warn('Only component with id attribute can save state');
+            return;
         }
         var state = reader(id);
         if (state) {
