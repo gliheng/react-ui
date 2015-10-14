@@ -64,9 +64,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _ConstantsJs = __webpack_require__(1);
+	var _Constants = __webpack_require__(1);
 
-	var _ConstantsJs2 = _interopRequireDefault(_ConstantsJs);
+	var _Constants2 = _interopRequireDefault(_Constants);
 
 	var _HGroupJsx = __webpack_require__(3);
 
@@ -88,15 +88,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TabsJsx2 = _interopRequireDefault(_TabsJsx);
 
+	var _Utils = __webpack_require__(2);
+
 	var _mixinsPersistentState = __webpack_require__(9);
 
 	__webpack_require__(17);
 
 	function config(_config) {
-	    Object.assign(_ConstantsJs2['default'].config, _config);
+	    (0, _Utils.extend)(_Constants2['default'].config, _config);
 
-	    if (_ConstantsJs2['default'].config.persistState) {
-	        var _Constants$config$persistFunc = _ConstantsJs2['default'].config.persistFunc();
+	    if (_Constants2['default'].config.persistState) {
+	        var _Constants$config$persistFunc = _Constants2['default'].config.persistFunc();
 
 	        var _Constants$config$persistFunc2 = _slicedToArray(_Constants$config$persistFunc, 2);
 
@@ -181,6 +183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Set = Set;
 	exports.noop = noop;
 	exports.getRootComponent = getRootComponent;
+	exports.extend = extend;
 
 	function enums(ids) {
 	    var obj = {};
@@ -231,6 +234,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        c = c.props.parent;
 	    }
+	}
+
+	function extend(target) {
+	    for (var _len = arguments.length, objs = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	        objs[_key - 1] = arguments[_key];
+	    }
+
+	    objs.forEach(function (obj) {
+	        if (!obj) return;
+	        for (var key in obj) {
+	            target[key] = obj[key];
+	        }
+	    });
 	}
 
 /***/ },
@@ -1375,7 +1391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".Tabs > .Tabs-Bar {\n  height: 36px; }\n  .Tabs > .Tabs-Bar a {\n    color: silver; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit {\n    float: right; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.add a,\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit a {\n    color: #333; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item {\n    cursor: default;\n    display: inline-block;\n    padding: 0 20px;\n    position: relative;\n    height: 36px;\n    line-height: 36px;\n    transition: background-color 0.5s; }\n    .Tabs > .Tabs-Bar .Tabs-Bar-Item .closeBtn {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      opacity: 0;\n      visibility: hidden;\n      transition: opacity 0.5s, visibility 0s linear 0.5s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active:after {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    content: '';\n    display: block;\n    height: 3px;\n    background-color: #1675bd; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn {\n    opacity: 1;\n    visibility: visible;\n    transition: opacity 0.5s, visibility 0s linear 0s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn:hover {\n    color: #333; }\n\n.Tabs > .Tabs-Content {\n  height: calc(100% - 36px); }\n  .Tabs > .Tabs-Content .TabContentItem {\n    position: relative;\n    height: 100%;\n    display: none;\n    overflow: hidden; }\n  .Tabs > .Tabs-Content .TabContentItem.active {\n    display: block;\n    background-color: #eee; }\n\n.HGroup {\n  display: flex;\n  flex-direction: row; }\n\n.VGroup {\n  display: flex;\n  flex-direction: column; }\n\n.HGroup, .VGroup, .View {\n  flex-basis: 0;\n  flex: 1; }\n\n.Gutter {\n  background-color: #eee; }\n\n.HGroup > .Gutter {\n  width: 4px;\n  min-width: 4px;\n  max-width: 4px; }\n\n.VGroup > .Gutter {\n  height: 4px;\n  min-height: 4px;\n  max-height: 4px; }\n\n.Gutter.ns {\n  cursor: row-resize; }\n\n.Gutter.we {\n  cursor: col-resize; }\n", ""]);
+	exports.push([module.id, ".Tabs > .Tabs-Bar {\n  height: 36px; }\n  .Tabs > .Tabs-Bar a {\n    color: silver; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit {\n    float: right; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.add a,\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit a {\n    color: #333; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item {\n    cursor: default;\n    display: inline-block;\n    padding: 0 20px;\n    position: relative;\n    height: 36px;\n    line-height: 36px;\n    transition: background-color 0.5s; }\n    .Tabs > .Tabs-Bar .Tabs-Bar-Item .closeBtn {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      opacity: 0;\n      visibility: hidden;\n      transition: opacity 0.5s, visibility 0s linear 0.5s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active:after {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    content: '';\n    display: block;\n    height: 3px;\n    background-color: #1675bd; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn {\n    opacity: 1;\n    visibility: visible;\n    transition: opacity 0.5s, visibility 0s linear 0s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn:hover {\n    color: #333; }\n\n.Tabs > .Tabs-Content {\n  height: calc(100% - 36px); }\n  .Tabs > .Tabs-Content .TabContentItem {\n    position: relative;\n    height: 100%;\n    display: none;\n    overflow: hidden; }\n  .Tabs > .Tabs-Content .TabContentItem.active {\n    display: block;\n    background-color: #eee; }\n\n.HGroup {\n  display: flex;\n  flex-direction: row; }\n\n.VGroup {\n  display: flex;\n  flex-direction: column; }\n\n.HGroup, .VGroup, .View {\n  flex-basis: 0;\n  flex: 1; }\n\n.Gutter {\n  background-color: #eee; }\n\n.HGroup > .Gutter {\n  width: 4px;\n  min-width: 4px;\n  max-width: 4px; }\n\n.VGroup > .Gutter {\n  height: 4px;\n  min-height: 4px;\n  max-height: 4px; }\n\n.Gutter.ns {\n  cursor: row-resize; }\n\n.Gutter.we {\n  cursor: col-resize; }\n\n.Grid {\n  overflow: hidden;\n  position: relative; }\n", ""]);
 
 	// exports
 

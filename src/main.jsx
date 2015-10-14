@@ -1,15 +1,16 @@
-import Constants from './Constants.js';
+import Constants from './Constants';
 import HGroup from './HGroup.jsx';
 import VGroup from './VGroup.jsx';
 import View from './View.jsx';
 import Grid from './Grid.jsx';
 import Tabs from './Tabs.jsx';
+import {extend} from './Utils';
 import {setReader, setWriter} from './mixins/PersistentState';
 
 require('./styles/style.scss');
 
 function config(_config) {
-    Object.assign(Constants.config, _config);
+    extend(Constants.config, _config);
 
     if (Constants.config.persistState) {
         let [reader, writer] = Constants.config.persistFunc();

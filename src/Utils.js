@@ -45,3 +45,12 @@ export function getRootComponent(c) {
         c = c.props.parent;
     }
 }
+
+export function extend(target, ...objs) {
+    objs.forEach(function (obj) {
+        if (!obj) return;
+        for (var key in obj) {
+            target[key] = obj[key];
+        }
+    });
+}
