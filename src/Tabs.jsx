@@ -27,7 +27,7 @@ let Tabs = React.createClass({
     },
 
     onTabClick(evt) {
-        var idx = evt.currentTarget.dataset.idx;
+        var idx = parseInt(evt.currentTarget.dataset.idx);
         this.setState({
             curTab: idx
         }, ()=> {
@@ -81,7 +81,9 @@ let Tabs = React.createClass({
             });
         return (
             <div id={this.props.id} className={className}>
-                <div className="Tabs-Bar">{barItems}</div>
+                <div className="Tabs-Bar">{barItems}
+                    <div className="Tabs-Bar-ToolBtns">{this.props.toolBtns}</div>
+                </div>
                 <div className="Tabs-Content">{content}</div>
             </div>
         );

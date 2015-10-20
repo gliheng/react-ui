@@ -27,8 +27,9 @@
         <script type="text/jsx">
             var Tabs = ReactUI.Tabs;
 
+            var ToolBtns = [<a key="1" href="javascript:;">btn1</a>, <a key="2" href="javascript:;">btn2</a>];
             var app = React.render(
-                <Tabs id="tab">
+                <Tabs id="tab" toolBtns={ToolBtns}>
                     <div className="a" label="tab 1">A</div>
                     <div className="b" label="tab 2">B</div>
                     <div className="c" label="tab 3">C</div>

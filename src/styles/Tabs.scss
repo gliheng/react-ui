@@ -59,6 +59,11 @@
                 color:$text;
             }
         }
+        .Tabs-Bar-ToolBtns {
+            float: right;
+            height: 36px;
+            line-height: 36px;
+        }
     }
 
     > .Tabs-Content {

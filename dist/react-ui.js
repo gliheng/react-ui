@@ -88,11 +88,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _TabsJsx2 = _interopRequireDefault(_TabsJsx);
 
+	var _PopupJsx = __webpack_require__(17);
+
+	var _PopupJsx2 = _interopRequireDefault(_PopupJsx);
+
 	var _Utils = __webpack_require__(2);
 
 	var _mixinsPersistentState = __webpack_require__(9);
 
-	__webpack_require__(17);
+	__webpack_require__(18);
 
 	function config(_config) {
 	    (0, _Utils.extend)(_Constants2['default'].config, _config);
@@ -136,6 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.Grid = _GridJsx2['default'];
 	exports.View = _ViewJsx2['default'];
 	exports.Tabs = _TabsJsx2['default'];
+	exports.Popup = _PopupJsx2['default'];
 	exports.bootstrap = bootstrap;
 	exports.config = config;
 
@@ -1150,8 +1155,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            props = this.props,
 	            state = this.state;
 
-	        if (this.props.className) {
-	            className += ' ' + this.props.className;
+	        if (props.className) {
+	            className += ' ' + props.className;
 	        }
 
 	        var size = this.getLayoutManager().layout(this.state.colsize, this.state.rowsize, this.state.colprecise, this.state.rowprecise, {
@@ -1284,7 +1289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    onTabClick: function onTabClick(evt) {
 	        var _this2 = this;
 
-	        var idx = evt.currentTarget.dataset.idx;
+	        var idx = parseInt(evt.currentTarget.dataset.idx);
 	        this.setState({
 	            curTab: idx
 	        }, function () {
@@ -1342,7 +1347,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _react2['default'].createElement(
 	                'div',
 	                { className: 'Tabs-Bar' },
-	                barItems
+	                barItems,
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'Tabs-Bar-ToolBtns' },
+	                    this.props.toolBtns
+	                )
 	            ),
 	            _react2['default'].createElement(
 	                'div',
@@ -1360,13 +1370,141 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _Constants = __webpack_require__(1);
+
+	var _Constants2 = _interopRequireDefault(_Constants);
+
+	var _react = __webpack_require__(5);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	/* API calls
+	Popup({
+	    content: <content></content>,
+	    btns: ['OK', 'Cancel']
+	}).show({
+	    modal: true
+	}).clicked(function () {
+	    return true; // close after this
+	    return false; // do not close after click
+	});
+	*/
+
+	var Popup = _react2['default'].createClass({
+	    displayName: 'Popup',
+
+	    getDefaultProps: function getDefaultProps() {
+	        return {
+	            buttons: ['OK', 'Cancel']
+	        };
+	    },
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            hide: 0
+	        };
+	    },
+
+	    renderButtons: function renderButtons() {
+	        var _this = this;
+
+	        return this.props.buttons.map(function (label, i) {
+	            return _react2['default'].createElement(
+	                'button',
+	                { key: i, 'data-idx': i, onClick: _this.onBtnClick },
+	                label
+	            );
+	        });
+	    },
+
+	    onBtnClick: function onBtnClick(evt) {
+	        var idx = evt.target.dataset.idx;
+	        if (typeof this.props.onBtnClick == 'function') {
+	            this.props.onBtnClick(idx, this.props.buttons[idx]);
+	        }
+	    },
+
+	    onClose: function onClose(evt) {
+	        this.setState({
+	            hide: 1
+	        });
+	    },
+
+	    componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	        if (this.state.hide == 1) {
+	            this.setState({
+	                hide: 2
+	            });
+	        }
+	    },
+
+	    render: function render() {
+	        var className = 'Popup',
+	            props = this.props,
+	            state = this.state;
+	        if (props.className) {
+	            className += ' ' + props.className;
+	        }
+	        if (state.hide == 1) {
+	            className += ' hide';
+	        } else if (state.hide == 2) {
+	            className += ' hidden';
+	        }
+
+	        var buttons = this.renderButtons();
+	        return _react2['default'].createElement(
+	            'div',
+	            { id: props.id, className: className },
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'Title' },
+	                _react2['default'].createElement(
+	                    'h1',
+	                    null,
+	                    props.title
+	                ),
+	                _react2['default'].createElement(
+	                    'a',
+	                    { className: 'Close', onClick: this.onClose, href: 'javascript:;' },
+	                    '×'
+	                )
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'Content' },
+	                props.children
+	            ),
+	            _react2['default'].createElement(
+	                'div',
+	                { className: 'Footer' },
+	                buttons
+	            )
+	        );
+	    }
+	});
+
+	exports['default'] = Popup;
+	module.exports = exports['default'];
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(18);
+	var content = __webpack_require__(19);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(20)(content, {});
+	var update = __webpack_require__(21)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1383,21 +1521,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(19)();
+	exports = module.exports = __webpack_require__(20)();
 	// imports
 
 
 	// module
-	exports.push([module.id, ".Tabs > .Tabs-Bar {\n  height: 36px; }\n  .Tabs > .Tabs-Bar a {\n    color: silver; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit {\n    float: right; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.add a,\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit a {\n    color: #333; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item {\n    cursor: default;\n    display: inline-block;\n    padding: 0 20px;\n    position: relative;\n    height: 36px;\n    line-height: 36px;\n    transition: background-color 0.5s; }\n    .Tabs > .Tabs-Bar .Tabs-Bar-Item .closeBtn {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      opacity: 0;\n      visibility: hidden;\n      transition: opacity 0.5s, visibility 0s linear 0.5s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active:after {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    content: '';\n    display: block;\n    height: 3px;\n    background-color: #1675bd; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn {\n    opacity: 1;\n    visibility: visible;\n    transition: opacity 0.5s, visibility 0s linear 0s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn:hover {\n    color: #333; }\n\n.Tabs > .Tabs-Content {\n  height: calc(100% - 36px); }\n  .Tabs > .Tabs-Content .TabContentItem {\n    position: relative;\n    height: 100%;\n    display: none;\n    overflow: hidden; }\n  .Tabs > .Tabs-Content .TabContentItem.active {\n    display: block;\n    background-color: #eee; }\n\n.HGroup {\n  display: flex;\n  flex-direction: row; }\n\n.VGroup {\n  display: flex;\n  flex-direction: column; }\n\n.HGroup, .VGroup, .View {\n  flex-basis: 0;\n  flex: 1; }\n\n.Gutter {\n  background-color: #eee; }\n\n.HGroup > .Gutter {\n  width: 4px;\n  min-width: 4px;\n  max-width: 4px; }\n\n.VGroup > .Gutter {\n  height: 4px;\n  min-height: 4px;\n  max-height: 4px; }\n\n.Gutter.ns {\n  cursor: row-resize; }\n\n.Gutter.we {\n  cursor: col-resize; }\n\n.Grid {\n  overflow: hidden;\n  position: relative; }\n", ""]);
+	exports.push([module.id, "@keyframes hide {\n  from {\n    transform: scale(1, 1); }\n  to {\n    transform: scale(0, 0); } }\n\n.Tabs > .Tabs-Bar {\n  height: 36px; }\n  .Tabs > .Tabs-Bar a {\n    color: silver; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit {\n    float: right; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.add a,\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.edit a {\n    color: #333; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item {\n    cursor: default;\n    display: inline-block;\n    padding: 0 20px;\n    position: relative;\n    height: 36px;\n    line-height: 36px;\n    transition: background-color 0.5s; }\n    .Tabs > .Tabs-Bar .Tabs-Bar-Item .closeBtn {\n      position: absolute;\n      top: 0;\n      right: 4px;\n      opacity: 0;\n      visibility: hidden;\n      transition: opacity 0.5s, visibility 0s linear 0.5s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active {\n    background: #eee; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item.active:after {\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    content: '';\n    display: block;\n    height: 3px;\n    background-color: #1675bd; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn {\n    opacity: 1;\n    visibility: visible;\n    transition: opacity 0.5s, visibility 0s linear 0s; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-Item:hover .closeBtn:hover {\n    color: #333; }\n  .Tabs > .Tabs-Bar .Tabs-Bar-ToolBtns {\n    float: right;\n    height: 36px;\n    line-height: 36px; }\n\n.Tabs > .Tabs-Content {\n  height: calc(100% - 36px); }\n  .Tabs > .Tabs-Content .TabContentItem {\n    position: relative;\n    height: 100%;\n    display: none;\n    overflow: hidden; }\n  .Tabs > .Tabs-Content .TabContentItem.active {\n    display: block;\n    background-color: #eee; }\n\n.Popup {\n  border: 1px solid #1675bd;\n  margin: 0 auto;\n  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.6); }\n  .Popup .Title {\n    position: relative;\n    border-bottom: 1px solid #eee; }\n    .Popup .Title h1 {\n      font-size: 1rem;\n      color: #333;\n      padding: 0;\n      margin: 0;\n      height: 36px;\n      line-height: 36px; }\n    .Popup .Title a.Close {\n      position: absolute;\n      right: 3px;\n      top: 3px;\n      text-decoration: none;\n      color: #888; }\n  .Popup .Title::after {\n    content: '';\n    position: absolute;\n    top: 0;\n    left: 0;\n    right: 0;\n    height: 3px;\n    background-color: #1675bd; }\n  .Popup .Footer {\n    text-align: right;\n    margin: 10px 0; }\n    .Popup .Footer button {\n      color: #eee;\n      background-color: #1675bd;\n      border: none;\n      margin: 0 4px; }\n\n.Popup.hide {\n  animation: hide 0.4s;\n  animation-fill-mode: forwards; }\n\n.Popup.hidden {\n  display: none; }\n\n.HGroup {\n  display: flex;\n  flex-direction: row; }\n\n.VGroup {\n  display: flex;\n  flex-direction: column; }\n\n.HGroup, .VGroup, .View {\n  flex-basis: 0;\n  flex: 1; }\n\n.Gutter {\n  background-color: #eee; }\n\n.HGroup > .Gutter {\n  width: 4px;\n  min-width: 4px;\n  max-width: 4px; }\n\n.VGroup > .Gutter {\n  height: 4px;\n  min-height: 4px;\n  max-height: 4px; }\n\n.Gutter.ns {\n  cursor: row-resize; }\n\n.Gutter.we {\n  cursor: col-resize; }\n\n.Grid {\n  overflow: hidden;\n  position: relative; }\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/*
@@ -1453,7 +1591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
