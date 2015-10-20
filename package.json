@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "react-ui a UI library for react. It contains dozens of reusable react components.",
   "scripts": {
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "amadeus",
@@ -11,7 +12,8 @@
   "files": [
      "README.md",
      "dist/",
-     "src/"
+     "src/",
+     "main.js"
   ],
   "dependencies": {
     "react": "^0.13.3"
