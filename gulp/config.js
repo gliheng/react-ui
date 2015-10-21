@@ -40,9 +40,9 @@ module.exports = {
         settings: {
             root: ['./examples/', '.'],
             host: 'localhost',
-            port: 8080,
+            port: 8081,
             livereload: {
-                port: 35929
+                port: 35930
             }
         }
     }

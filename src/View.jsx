@@ -1,9 +1,10 @@
 import React from 'react';
 import DimensionMixin from './mixins/Dimension';
 import PersistentStateMixin from './mixins/PersistentState';
+import ResponsiveMixin from './mixins/Responsive';
 
 let View = React.createClass({
-    mixins: [DimensionMixin, PersistentStateMixin],
+    mixins: [DimensionMixin, PersistentStateMixin, ResponsiveMixin],
 
     render() {
         var className = "View";
@@ -19,8 +20,21 @@ let View = React.createClass({
                 maxHeight: this.state.height
             };
         }
+
+        var children = [];
+        React.Children.forEach(this.props.children, (c, i)=> {
+            if (typeof c == 'object') {
+                var key = 'child-' + i;
+                c = React.addons.cloneWithProps(c, {
+                    key: key,
+                    ref: key,
+                    parent: this
+                });
+            }
+            children.push(c);
+        });
         return (
-            <div id={this.props.id} className={className} style={style}>{this.props.children}</div>
+            <div id={this.props.id} className={className} style={style}>{children}</div>
         );
     }
 });
