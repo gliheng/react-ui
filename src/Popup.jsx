@@ -8,7 +8,7 @@ let Popup = React.createClass({
         show: function (args) {
             var $root = getTMPDOMRoot(args.modal);
             var popup = (
-                <Popup title={args.title} animated={args.animated} onBtnClick={args.btnClicked}>
+                <Popup className={args.className} title={args.title} animated={args.animated} onBtnClick={args.btnClicked}>
                     {args.content}
                 </Popup>
             );
