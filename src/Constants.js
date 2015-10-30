@@ -8,6 +8,7 @@ export default {
     ]),
 
     config: {
+        transitionDuration: 500,
         gutterWidth: 4,
         persistState: true,
         persistFunc: function () {

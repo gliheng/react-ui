@@ -34,10 +34,10 @@
             }
         }
         .Tabs-Bar-Item:hover{
-            background:#eee;
+            background:$light-bg;
         }
         .Tabs-Bar-Item.active{
-            background:#eee;
+            background:$light-bg;
         }
         .Tabs-Bar-Item.active:after{
             position:absolute;
@@ -76,7 +76,7 @@
         }
         .TabContentItem.active{
             display:block;
-            background-color:#eee;
+            background-color:$light-bg;
         }
     }
 }

@@ -54,3 +54,14 @@ export function extend(target, ...objs) {
         }
     });
 }
+
+export function getTMPDOMRoot(modal) {
+    var $root = document.createElement('div'),
+        className = 'TMPDOMRoot';
+
+    if (modal) className += ' Mask';
+    $root.className = className;
+
+    document.body.appendChild($root);
+    return $root;
+}

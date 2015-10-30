@@ -107,8 +107,8 @@ let Grid = React.createClass({
             props = this.props,
             state = this.state;
 
-        if (this.props.className) {
-            className += ' ' + this.props.className;
+        if (props.className) {
+            className += ' ' + props.className;
         }
 
         var size = this.getLayoutManager().layout(
