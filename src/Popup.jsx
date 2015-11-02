@@ -38,7 +38,7 @@ let Popup = React.createClass({
     onBtnClick(evt) {
         var idx = evt.target.dataset.idx;
         if (typeof this.props.onBtnClick == 'function') {
-            var ret = this.props.onBtnClick(idx, this.props.buttons[idx]);
+            var ret = this.props.onBtnClick(idx, this.refs.content.state);
             if (ret) {
                 this.close();
             }
@@ -76,13 +76,16 @@ let Popup = React.createClass({
         }
 
         var buttons = this.renderButtons();
+        var content = React.addons.cloneWithProps(props.children, {
+            ref: 'content'
+        });
         return (
             <div id={props.id} className={className}>
                 <div className="Title">
                     <h1>{props.title}</h1>
                     <a className="Close" onClick={this.close} href="javascript:;">&times;</a>
                 </div>
-                <div className="Content">{props.children}</div>
+                <div className="Content">{content}</div>
                 <div className="Footer">{buttons}</div>
             </div>
         );
