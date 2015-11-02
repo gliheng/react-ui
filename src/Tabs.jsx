@@ -75,9 +75,12 @@ let Tabs = React.createClass({
             items[i] = {label: c.props.label, icon: c.props.icon};
         });
 
+        // cloneWithProps does not transfer key or ref to the cloned element.
         var barItems = this.renderTabbar(items),
-            content = React.addons.cloneWithProps(props.children[state.curTab], {
-                ref: 'activeContent'
+            element = props.children[state.curTab],
+            content = React.addons.cloneWithProps(element, {
+                ref: 'activeContent',
+                key: element.key
             });
         return (
             <div id={this.props.id} className={className}>
