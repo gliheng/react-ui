@@ -80,7 +80,7 @@ let Tabs = React.createClass({
             element = props.children[state.curTab],
             content = React.addons.cloneWithProps(element, {
                 ref: 'activeContent',
-                key: element.key
+                key: element.key || `child-${state.curTab}`
             });
         return (
             <div id={this.props.id} className={className}>

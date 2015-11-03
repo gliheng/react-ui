@@ -140,7 +140,7 @@ let Grid = React.createClass({
                     // key = `child-${x}-${y}`;
 
                 mutant.push(React.addons.cloneWithProps(c, {
-                    key: key,
+                    key: c.key || key,
                     ref: key,
                     parent: this,
                     style: {

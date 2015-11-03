@@ -22,7 +22,7 @@ let groupFactory = function (type, elementName) {
             React.Children.forEach(children, (c, i)=> {
                 var key = 'child-' + i;
                 mutant.push(React.addons.cloneWithProps(c, {
-                    key: key,
+                    key: c.key || key,
                     ref: key,
                     parent: this
                 }));

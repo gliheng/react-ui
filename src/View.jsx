@@ -24,9 +24,9 @@ let View = React.createClass({
         var children = [];
         React.Children.forEach(this.props.children, (c, i)=> {
             if (typeof c == 'object') {
-                var key = 'child-' + i;
+                var key = `child-${i}`;
                 c = React.addons.cloneWithProps(c, {
-                    key: key,
+                    key: c.key || key,
                     ref: key,
                     parent: this
                 });
