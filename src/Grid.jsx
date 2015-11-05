@@ -115,8 +115,8 @@ let Grid = React.createClass({
             this.state.colsize,
             this.state.rowsize,
             this.state.colprecise,
-            this.state.rowprecise, {
-                gutterWidth: props.gutterWidth,
+            this.state.rowprecise,
+            {
                 gutterWidth: props.gutterWidth,
                 cols: parseInt(props.cols),
                 rows: parseInt(props.rows)
