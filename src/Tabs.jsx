@@ -11,7 +11,7 @@ let Tabs = React.createClass({
 
     getInitialState: function () {
         return {
-            curTab: 0
+            curTab: this.props.defaultTab || 0
         }
     },
 
@@ -38,6 +38,12 @@ let Tabs = React.createClass({
 
             this.restoreContentState();
         });
+    },
+
+    setTab(idx, cbk) {
+        this.setState({
+            curTab: idx
+        }, cbk);
     },
 
     restoreContentState() {
