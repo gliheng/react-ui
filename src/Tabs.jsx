@@ -83,12 +83,19 @@ let Tabs = React.createClass({
             items[i] = {label: c.props.label, icon: c.props.icon};
         });
 
+        // this remove invalid state before rendder
+        // Is this good?
+        var curTab = state.curTab;
+        if (curTab >= children.length) {
+            curTab = children.length - 1;
+        }
+
         // cloneWithProps does not transfer key or ref to the cloned element.
         var barItems = this.renderTabbar(items),
-            element = children[state.curTab],
+            element = children[curTab],
             content = React.addons.cloneWithProps(element, {
                 ref: 'activeContent',
-                key: element.key || `child-${state.curTab}`
+                key: element.key || `child-${curTab}`
             });
         return (
             <div id={this.props.id} className={className}>
