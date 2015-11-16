@@ -52,10 +52,19 @@ let Grid = React.createClass({
         return gutters;
     },
 
+    getDefaultSpec(count) {
+        var spec = [];
+        for (var i = 0; i < parseInt(count); i++) {
+            spec.push('1');
+        }
+        return spec.join(',');
+    },
+
     componentWillMount() {
         // parse colsize property
-        var [colsize, colprecise] = this.parseSizeSpec(this.props.colsize);
-        var [rowsize, rowprecise] = this.parseSizeSpec(this.props.rowsize);
+        this.props.colsize
+        var [colsize, colprecise] = this.parseSizeSpec(this.props.colsize || this.getDefaultSpec(this.props.cols));
+        var [rowsize, rowprecise] = this.parseSizeSpec(this.props.rowsize || this.getDefaultSpec(this.props.rows));
 
         this.state.colsize = colsize;
         this.state.colprecise = colprecise;
