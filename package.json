@@ -10,10 +10,10 @@
   "license": "MIT",
   "main": "main.js",
   "files": [
-     "README.md",
-     "dist/",
-     "src/",
-     "main.js"
+    "README.md",
+    "dist/",
+    "src/",
+    "main.js"
   ],
   "dependencies": {
     "react": "^0.13.3"
@@ -26,7 +26,6 @@
     "gulp-connect": "^2.2.0",
     "gulp-sass": "^2.0.4",
     "gulp-util": "^3.0.6",
-    "node-sass": "^3.3.2",
     "require-dir": "^0.3.0",
     "sass-loader": "^2.0.1",
     "style-loader": "^0.12.3",

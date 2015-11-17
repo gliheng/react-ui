@@ -6,6 +6,10 @@ import ResponsiveMixin from './mixins/Responsive';
 let View = React.createClass({
     mixins: [DimensionMixin, PersistentStateMixin, ResponsiveMixin],
 
+    componentDidUpdate() {
+        this.resize();
+    },
+
     render() {
         var className = "View";
         if (this.props.className) className += ' ' + this.props.className;
