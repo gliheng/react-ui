@@ -4,10 +4,10 @@ import Constants from './Constants';
 import DimensionMixin from './mixins/Dimension';
 import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
-import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
+import {LayoutMaster} from './mixins/LayoutMaster';
 
 let Grid = React.createClass({
-    mixins: [LayoutManagerMixinFactory(Constants.Types.GRID), ResponsiveMixin, DimensionMixin, PersistentStateMixin],
+    mixins: [LayoutMaster(Constants.Types.GRID), ResponsiveMixin, DimensionMixin, PersistentStateMixin],
 
     getDefaultProps() {
         return {

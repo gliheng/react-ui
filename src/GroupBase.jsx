@@ -4,11 +4,11 @@ import Gutter from './Gutter.jsx';
 import DimensionMixin from './mixins/Dimension';
 import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
-import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
+import {LayoutMaster} from './mixins/LayoutMaster';
 
 let groupFactory = function (type, elementName) {
     return React.createClass({
-        mixins: [LayoutManagerMixinFactory(type), DimensionMixin, ResponsiveMixin, PersistentStateMixin],
+        mixins: [LayoutMaster(type), DimensionMixin, ResponsiveMixin, PersistentStateMixin],
 
         render() {
             var className = elementName,

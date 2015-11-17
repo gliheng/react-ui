@@ -4,7 +4,6 @@ import Constants from './Constants';
 import DimensionMixin from './mixins/Dimension';
 import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
-import {LayoutManagerMixinFactory} from './mixins/LayoutManager';
 
 let Tabs = React.createClass({
     mixins: [PersistentStateMixin, ResponsiveMixin],

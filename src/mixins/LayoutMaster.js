@@ -3,7 +3,7 @@ import GroupLayoutManager from './GroupLayoutManager';
 import GridLayoutManager from './GridLayoutManager';
 
 
-function LayoutManagerMixinFactory(type) {
+function LayoutMaster(type) {
     return {
         getDefaultProps() {
             return {
@@ -26,4 +26,4 @@ function LayoutManagerMixinFactory(type) {
 }
 
 
-export {LayoutManagerMixinFactory};
+export {LayoutMaster};
