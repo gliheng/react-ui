@@ -17,7 +17,7 @@ let Popup = React.createClass({
                     {args.content}
                 </Popup>
             );
-            React.render(popup, $root)
+            return React.render(popup, $root);
         }
     },
 
@@ -57,7 +57,7 @@ let Popup = React.createClass({
         }
     },
 
-    close(evt) {
+    close() {
         if (this.props.animated) {
             this.setState({
                 hide: true
