@@ -35,9 +35,16 @@ let Popup = React.createClass({
     },
 
     renderButtons() {
-        return this.props.buttons.map((label, i)=> {
-            return <button key={i} data-idx={i} onClick={this.onBtnClick}>{label}</button>;
-        });
+        var footer = null;
+
+        if (this.props.buttons && this.props.buttons.length) {
+            let buttons = this.props.buttons.map((label, i)=> {
+                return <button key={i} data-idx={i} onClick={this.onBtnClick}>{label}</button>;
+            });
+            footer = <div className="Footer">{buttons}</div>
+        }
+
+        return footer;
     },
 
     onBtnClick(evt) {
@@ -80,7 +87,7 @@ let Popup = React.createClass({
             className += state.hide ? ' hide' : ' show';
         }
 
-        var buttons = this.renderButtons();
+        var footer = this.renderButtons();
         var content = React.addons.cloneWithProps(props.children, {
             ref: 'content'
         });
@@ -91,7 +98,7 @@ let Popup = React.createClass({
                     <a className="Close" onClick={this.close} href="javascript:;">&times;</a>
                 </div>
                 <div className="Content">{content}</div>
-                <div className="Footer">{buttons}</div>
+                {footer}
             </div>
         );
     }
