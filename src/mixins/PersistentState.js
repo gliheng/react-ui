@@ -18,12 +18,19 @@ export default {
         var s = clone(this.state),
             children = this.props.children;
         // console.log(this.getDOMNode());
-        if (full && Array.isArray(children)) {
-            s.children = children.map((c, i)=> {
-                var child = this.refs['child-' + i];
-                if (child === undefined) return null;
-                return child.getState(full);
-            });
+        if (full) {
+            var childrenState = [];
+            for (var key in this.refs) {
+                if (key.startsWith('child-') && typeof this.refs[key].getState === 'function') {
+                    var idx = parseInt(key.substring(6));
+                    if (!isNaN(idx)) {
+                        childrenState[idx] = this.refs[key].getState(full);
+                    }
+                }
+            }
+            if (childrenState.length != 0) {
+                s.children = childrenState;
+            }
         }
         return s;
     },
@@ -37,7 +44,7 @@ export default {
         if (childrenState) {
             React.Children.forEach(children, (c, i)=> {
                 var child = this.refs['child-' + i];
-                if (child === undefined) {
+                if (!child || !childrenState[i] || typeof child.putState != 'function') {
                     // this case may happen, if the component's children is not rendered
 
                     // console.error('Can\' find component to apply state');
