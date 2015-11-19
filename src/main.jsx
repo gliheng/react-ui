@@ -1,10 +1,10 @@
 import Constants from './Constants';
-import HGroup from './HGroup.jsx';
-import VGroup from './VGroup.jsx';
-import View from './View.jsx';
-import Grid from './Grid.jsx';
-import Tabs from './Tabs.jsx';
-import Popup from './Popup.jsx';
+import HGroup from './HGroup';
+import VGroup from './VGroup';
+import View from './View';
+import Grid from './Grid';
+import Tabs from './Tabs';
+import Popup from './Popup';
 import * as Utils from './Utils';
 import {setReader, setWriter} from './mixins/PersistentState';
 

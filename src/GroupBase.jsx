@@ -1,62 +1,114 @@
 import React from 'react';
 import Constants from './Constants';
-import Gutter from './Gutter.jsx';
-import DimensionMixin from './mixins/Dimension';
+import Gutter from './Gutter';
 import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
 import {LayoutMaster} from './mixins/LayoutMaster';
+import {extend} from './Utils';
 
-let groupFactory = function (type, elementName) {
+let layoutFactory = function (type, elementName) {
     return React.createClass({
-        mixins: [LayoutMaster(type), DimensionMixin, ResponsiveMixin, PersistentStateMixin],
+        displayName: elementName,
 
-        render() {
-            var className = elementName,
-                children = this.props.children,
-                mutant = [];
+        mixins: [LayoutMaster, ResponsiveMixin, PersistentStateMixin],
 
-            if (this.props.className) {
-                className += ' ' + this.props.className;
-            }
+        getDefaultProps() {
+            return {
+                type: type,
+                resizable: true
+            };
+        },
 
-            React.Children.forEach(children, (c, i)=> {
-                var key = 'child-' + i;
-                mutant.push(React.addons.cloneWithProps(c, {
-                    key: c.key || key,
-                    ref: key,
-                    parent: this
-                }));
-                if (this.props.resizable) {
-                    if (i != children.length - 1) {
-                        var className;
-                        if (type == Constants.Types.HGROUP) {
-                            className = 'we';
-                        } else if (type == Constants.Types.VGROUP) {
-                            className = 'ns';
-                        }
-                        mutant.push(<Gutter className={className} key={'gutter-' + i} getLayoutManager={this.getLayoutManager} idx={i}></Gutter>);
-                    }
+        componentWillMount() {
+            var size = [], precise = [];
+            React.Children.forEach(this.props.children, (c, i)=> {
+                if (type == Constants.Types.HGROUP && 'width' in c.props || type == Constants.Types.VGROUP && 'height' in c.props) {
+                    size[i] = type == Constants.Types.HGROUP? c.props.width : c.props.height;
+                    precise[i] = true;
+                } else {
+                    size[i] = c.props.flex || 1;
+                    precise[i] = false;
                 }
             });
 
-            // undefined value is skipped by react
-            // just set them all
-            var style = {
-                flexGrow: this.state.flex,
-                width: this.state.width,
-                height: this.state.height,
-                minWidth: this.state.width,
-                minHeight: this.state.height,
-                maxWidth: this.state.width,
-                maxHeight: this.state.height
-            };
+            this.state.size = size;
+            this.state.precise = precise;
+        },
+
+        render() {
+            var className = elementName,
+                props = this.props,
+                state = this.state,
+                width = props.width || state.width,
+                height = props.height || state.height,
+                children = [];
+
+            if (props.className) {
+                className += ' ' + props.className;
+            }
+
+            var dimension = this.getLayoutManager().layout(
+                state.size,
+                state.precise,
+                type == Constants.Types.HGROUP? width : height);
+
+            if (dimension) {
+                var [size, pos] = dimension;
+
+                // create gutters
+                if (props.resizable) {
+                    children = children.concat(this.renderGutters(type != Constants.Types.HGROUP, pos));
+                }
+
+                // create panels
+                React.Children.forEach(props.children, (c, i)=> {
+                    let key = `child-${i}`,
+                        style;
+
+                    if (type == Constants.Types.HGROUP) {
+                        style = {
+                            position: 'absolute',
+                            left: pos[i],
+                            top: 0,
+                            width: size[i],
+                            height: height
+                        }
+                    } else if (type == Constants.Types.VGROUP) {
+                        style = {
+                            position: 'absolute',
+                            left: 0,
+                            top: pos[i],
+                            width: width,
+                            height: size[i]
+                        }
+                    }
+
+                    children.push(React.addons.cloneWithProps(c, extend({
+                        key: c.key || key,
+                        ref: key,
+                        parent: this
+                    }, style)));
+                });
+
+            }
+
+            if ('width' in props && 'height' in props) {
+                var style = {
+                    position: 'absolute',
+                    left: props.left,
+                    top: props.top,
+                    width: props.width,
+                    height: props.height
+                };
+            }
 
             return (
-                <div id={this.props.id} className={className} style={style}>{mutant}</div>
+                <div id={props.id}
+                    className={className}
+                    style={style}>{children}</div>
             );
         }
     });
-
 };
 
-export {groupFactory};
+export {layoutFactory};

@@ -22,6 +22,10 @@ module.exports = {
                 {test: /\.scss$/, loader: 'style!css!sass'}
             ]
         },
+        resolve: {
+            root: pwd,
+            extensions: ['', '.js', '.jsx']
+        },
         externals: {react: "React"}
     },
     sass: {

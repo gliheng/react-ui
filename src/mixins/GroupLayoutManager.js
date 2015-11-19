@@ -3,68 +3,106 @@ import {getRootComponent} from '../Utils';
 
 
 class GroupLayoutManager {
-    constructor(parent, type) {
-        this.parent = parent;
+
+    constructor(parent, type, gutter) {
         this.type = type;
+        this.gutter = gutter;
+        this.parent = parent;
+    }
+
+    /** Calc position of gutters */
+    calcPos(size) {
+        var d = 0;
+        var pos = size.map((size, i)=> {
+            var p = d;
+            d = p + size + this.gutter;
+            return p;
+        });
+
+        return pos;
+    }
+
+    /** Convert all scale to absolute px unit */
+    calcSize(total, size, precise) {
+        var pxSize = [],
+            remain = total,
+            totalRatio = 0;
+
+        for (var i = 0; i < size.length; i++) {
+            var v = size[i];
+            if (precise[i]) {
+                remain -= v;
+                pxSize[i] = v;
+            } else {
+                totalRatio += v;
+            }
+        }
+
+        remain -= (size.length - 1) * this.gutter;
+
+        for (var i = 0; i < size.length; i++) {
+            if (pxSize[i] === undefined) {
+                pxSize[i] = (size[i] / totalRatio) * remain;
+            }
+        }
+        return pxSize;
+    }
+
+    layout(size, precise, length) {
+        if (!length) return null;
+
+        var pxSize = this.calcSize(length, size, precise);
+        var pos = this.calcPos(pxSize);
+
+        // these are size in pixels
+        this.pxSize = pxSize;
+
+        return [pxSize, pos];
     }
 
     startResize(idx) {
-        var first = this.parent.refs['child-' + idx],
-            second = this.parent.refs['child-' + (idx+1)],
-            $first = first.getDOMNode(),
-            $second = second.getDOMNode();
-        this.firstComp = first;
-        this.secondComp = second;
-        this.firstDimension = {width: $first.clientWidth, height: $first.clientHeight};
-        this.secondDimension = {width: $second.clientWidth, height: $second.clientHeight};
+        this.moveIdx = idx;
+        this.sizeSnapshot = this.parent.state.size.concat();
+        this.pxSnapshot = this.pxSize.concat();
     }
 
     moveResize(x, y) {
-        if (this.type == Constants.Types.HGROUP) {
-            var p = 'width';
-            var v = x;
-        } else if (this.type == Constants.Types.VGROUP) {
-            var p = 'height';
-            var v = y;
-        } else {
-            throw "Not implemented";
-        }
+        var size = this.sizeSnapshot.concat(),
+            precise = this.parent.state.precise,
+            pxSnapshot = this.pxSnapshot,
+            delta = this.type == Constants.Types.HGROUP ? x : y;
 
-        var firstPrecise = 'width' in this.firstComp.props || 'height' in this.firstComp.props,
-            secondPrecise = 'width' in this.secondComp.props || 'height' in this.secondComp.props;
-        if (firstPrecise && secondPrecise) {
-            throw new Error('Both intermediate elements have dimensions set. Can\'t resize');
-        } else if (firstPrecise || secondPrecise) {
-            // one side have dimension set
-            var preciseComp = firstPrecise? this.firstComp : this.secondComp,
-                dimension = firstPrecise? this.firstDimension : this.secondDimension;
-            preciseComp.setState({
-                [p]: dimension[p] + (firstPrecise ? v : -v)
-            });
-        } else {
-            // both use flex
-            var flexTotal = this.firstComp.state.flex + this.secondComp.state.flex,
-                ratio = (this.firstDimension[p] + v) / (this.firstDimension[p] + this.secondDimension[p]);
-            ratio = Math.max(ratio, 0);
-            ratio = Math.min(ratio, 1);
-            this.firstComp.setState({
-                flex: flexTotal * ratio
-            });
-            this.secondComp.setState({
-                flex: flexTotal * (1-ratio)
-            });
-        }
+        this.modifySize(size, precise, pxSnapshot, this.moveIdx, delta);
+        this.parent.setState({
+            'size': size
+        });
     }
 
     doneResize(idx) {
-        delete this.firstComp;
-        delete this.secondComp;
-        delete this.firstDimension;
-        delete this.secondDimension;
+        delete this.sizeSnapshot;
+        delete this.pxSnapshot;
 
         // root component has an id
         var root = getRootComponent(this.parent);
         if (root) root.saveState();
+    }
+
+    modifySize(size, precise, pxSnapshot, idx, delta) {
+        var firstPrecise = precise[idx],
+            secondPrecise = precise[idx+1];
+
+        if (firstPrecise || secondPrecise) {
+            // if either side is px unit, change only that value
+            idx = firstPrecise? idx : idx + 1;
+            delta = firstPrecise? delta : -delta;
+            size[idx] = size[idx] + delta;
+        } else {
+            let ratio = (pxSnapshot[idx] + delta)/(pxSnapshot[idx+1] + pxSnapshot[idx]);
+            let a = (size[idx] + size[idx+1]) * ratio,
+                b = (size[idx] + size[idx+1]) * (1 - ratio);
+            size[idx] = a;
+            size[idx+1] = b;
+        }
     }
 }
 

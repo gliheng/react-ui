@@ -1,5 +1,5 @@
 import Constants from './Constants';
-import {groupFactory} from './GroupBase.jsx';
+import {layoutFactory} from './GroupBase';
 
-let HGroup = groupFactory(Constants.Types.HGROUP, 'HGroup');
+let HGroup = layoutFactory(Constants.Types.HGROUP, 'HGroup');
 export default HGroup;

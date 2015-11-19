@@ -1,10 +1,9 @@
 import React from 'react';
-import DimensionMixin from './mixins/Dimension';
 import PersistentStateMixin from './mixins/PersistentState';
 import ResponsiveMixin from './mixins/Responsive';
 
 let View = React.createClass({
-    mixins: [DimensionMixin, PersistentStateMixin, ResponsiveMixin],
+    mixins: [PersistentStateMixin, ResponsiveMixin],
 
     componentDidUpdate() {
         this.resize();
@@ -14,16 +13,8 @@ let View = React.createClass({
         var className = "View";
         if (this.props.className) className += ' ' + this.props.className;
 
-        var style = this.props.style;
-        if (!style) {
-            style = {
-                flexGrow: this.state.flex,
-                minWidth: this.state.width,
-                minHeight: this.state.height,
-                maxWidth: this.state.width,
-                maxHeight: this.state.height
-            };
-        }
+        var {position, left, top, width, height} = this.props;
+        var style = {position, left, top, width, height};
 
         var children = [];
         React.Children.forEach(this.props.children, (c, i)=> {

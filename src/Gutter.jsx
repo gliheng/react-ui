@@ -8,7 +8,7 @@ let Gutter = React.createClass({
             x: evt.clientX,
             y: evt.clientY
         };
-        this.props.getLayoutManager().startResize(this.props.idx);
+        this.props.getLayoutManager().startResize(this.props.idx, this.props.h);
 
         window.addEventListener('mousemove', this.onMouseMove);
         window.addEventListener('mouseup', this.onMouseUp);

@@ -12,8 +12,8 @@ export function setWriter(_writer) {
 }
 
 export default {
-    /* get the state dict recursively from the component
-     **/
+    /** get the state dict recursively from the component
+     */
     getState(full) {
         var s = clone(this.state),
             children = this.props.children;
@@ -35,8 +35,8 @@ export default {
         return s;
     },
 
-    /* apply state to the component
-     **/
+    /** apply state to the component
+     */
     putState(state) {
         var children = this.props.children,
             childrenState = state.children;
@@ -61,8 +61,8 @@ export default {
         });
     },
 
-    /* get state from component then persist the state info
-     **/
+    /** get state from component then persist the state info
+     */
     saveState() {
         var id = this.props.id;
         // only component with id attribute can save state
@@ -74,8 +74,8 @@ export default {
         writer(id, s);
     },
 
-    /* get state from store the apply it the component
-     **/
+    /** get state from store the apply it the component
+     */
     restoreState() {
         var id = this.props.id;
         if (!id) {

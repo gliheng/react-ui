@@ -53,6 +53,7 @@ export function extend(target, ...objs) {
             target[key] = obj[key];
         }
     });
+    return target;
 }
 
 export function getTMPDOMRoot(modal) {

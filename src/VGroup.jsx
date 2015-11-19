@@ -1,5 +1,5 @@
 import Constants from './Constants';
-import {groupFactory} from './GroupBase.jsx';
+import {layoutFactory} from './GroupBase';
 
-let VGroup = groupFactory(Constants.Types.VGROUP, 'VGroup');
+let VGroup = layoutFactory(Constants.Types.VGROUP, 'VGroup');
 export default VGroup;

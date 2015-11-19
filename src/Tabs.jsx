@@ -1,7 +1,6 @@
 import React from 'react';
-import Gutter from './Gutter.jsx';
+import Gutter from './Gutter';
 import Constants from './Constants';
-import DimensionMixin from './mixins/Dimension';
 import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
 
