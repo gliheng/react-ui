@@ -15,9 +15,8 @@ export default {
     /** get the state dict recursively from the component
      */
     getState(full) {
-        var s = clone(this.state),
+        var s = clone(this.state || {}, ['size', 'colsize', 'rowsize']),
             children = this.props.children;
-        // console.log(this.getDOMNode());
         if (full) {
             var childrenState = [];
             for (var key in this.refs) {
@@ -46,7 +45,6 @@ export default {
                 var child = this.refs['child-' + i];
                 if (!child || !childrenState[i] || typeof child.putState != 'function') {
                     // this case may happen, if the component's children is not rendered
-
                     // console.error('Can\' find component to apply state');
                     return;
                 }

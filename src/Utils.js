@@ -6,10 +6,17 @@ export function enums(ids) {
     return obj;
 }
 
-export function clone(obj) {
+export function clone(obj, keys) {
     var ret = {};
-    for (var key in obj) {
-        ret[key] = obj[key];
+    if (Array.isArray(keys)) {
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            ret[key] = obj[key];
+        }
+    } else {
+        for (var key in obj) {
+            ret[key] = obj[key];
+        }
     }
     return ret;
 }
