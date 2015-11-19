@@ -50,7 +50,7 @@ let Popup = React.createClass({
     onBtnClick(evt) {
         var idx = evt.target.dataset.idx;
         if (typeof this.props.onBtnClick == 'function') {
-            var ret = this.props.onBtnClick(idx, this.refs.content.state);
+            var ret = this.props.onBtnClick(idx, this.refs.content);
             if (ret) {
                 this.close();
             }
