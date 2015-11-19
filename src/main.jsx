@@ -5,13 +5,13 @@ import View from './View.jsx';
 import Grid from './Grid.jsx';
 import Tabs from './Tabs.jsx';
 import Popup from './Popup.jsx';
-import {extend} from './Utils';
+import * as Utils from './Utils';
 import {setReader, setWriter} from './mixins/PersistentState';
 
 require('./styles/style.scss');
 
 function config(_config) {
-    extend(Constants.config, _config);
+    Utils.extend(Constants.config, _config);
 
     if (Constants.config.persistState) {
         let [reader, writer] = Constants.config.persistFunc();
@@ -41,4 +41,4 @@ function bootstrap(app) {
     return app;
 }
 
-export {HGroup, VGroup, Grid, View, Tabs, Popup, bootstrap, config};
+export {HGroup, VGroup, Grid, View, Tabs, Popup, bootstrap, config, Utils};
