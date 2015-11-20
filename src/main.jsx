@@ -36,7 +36,6 @@ function bootstrap(app) {
         app.saveState();
     });
 
-    app.restoreState();
     resize();
     return app;
 }

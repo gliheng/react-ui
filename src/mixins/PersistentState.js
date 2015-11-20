@@ -1,5 +1,5 @@
 import React from 'react';
-import {noop, clone, exclude} from '../Utils';
+import {noop, clone, exclude, empty} from '../Utils';
 
 var reader = noop;
 export function setReader(_reader) {
@@ -15,19 +15,21 @@ export default {
     /** get the state dict recursively from the component
      */
     getState(full) {
-        var s = clone(this.state || {}, ['size', 'colsize', 'rowsize']),
+        var s = clone(this.state || {}, ['curTab', 'size', 'colsize', 'rowsize']),
             children = this.props.children;
         if (full) {
-            var childrenState = [];
+            var childrenState = {};
             for (var key in this.refs) {
-                if (key.startsWith('child-') && typeof this.refs[key].getState === 'function') {
-                    var idx = parseInt(key.substring(6));
-                    if (!isNaN(idx)) {
-                        childrenState[idx] = this.refs[key].getState(full);
-                    }
+                let c = this.refs[key];
+                if (typeof c.getState === 'function') {
+                    childrenState[key] = c.getState(full);
                 }
             }
-            if (childrenState.length != 0) {
+            let cEmpty = empty(childrenState);
+            if (empty(s) && cEmpty) {
+                return null;
+            }
+            if (!cEmpty) {
                 s.children = childrenState;
             }
         }
@@ -37,24 +39,22 @@ export default {
     /** apply state to the component
      */
     putState(state) {
+        if (!state) return;
         var children = this.props.children,
             childrenState = state.children;
 
-        if (childrenState) {
-            React.Children.forEach(children, (c, i)=> {
-                var child = this.refs['child-' + i];
-                if (!child || !childrenState[i] || typeof child.putState != 'function') {
-                    // this case may happen, if the component's children is not rendered
-                    // console.error('Can\' find component to apply state');
-                    return;
-                }
-                return child.putState(childrenState[i]);
-            });
-        }
-        // console.log(this.getDOMNode(), exclude(state, 'children'));
         this.setState(exclude(state, 'children'), ()=>{
             if (typeof this.stateRestored == 'function') {
                 this.stateRestored();
+            }
+
+            if (childrenState) {
+                for (var key in childrenState) {
+                    let c = this.refs[key];
+                    if (c !== undefined && typeof c.putState == 'function') {
+                        c.putState(childrenState[key]);
+                    }
+                }
             }
         });
     },

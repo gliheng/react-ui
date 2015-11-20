@@ -6,12 +6,36 @@ export function enums(ids) {
     return obj;
 }
 
+/** check whether an object is empty
+ *  null, {}, {child-0: null} are all empty
+ */
+export function empty(obj) {
+    if (!obj) {
+        return true;
+    }
+    if (Array.isArray(obj)) {
+        return !obj.length;
+    } else if (typeof obj == 'object') {
+        var empty = true;
+        for (var key in obj) {
+            if (obj[key]) {
+                empty = false;
+                break;
+            }
+        }
+        return empty;
+    }
+    return true;
+}
+
 export function clone(obj, keys) {
     var ret = {};
     if (Array.isArray(keys)) {
         for (var i = 0; i < keys.length; i++) {
             var key = keys[i];
-            ret[key] = obj[key];
+            if (key in obj) {
+                ret[key] = obj[key];
+            }
         }
     } else {
         for (var key in obj) {

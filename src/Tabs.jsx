@@ -5,7 +5,7 @@ import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
 
 let Tabs = React.createClass({
-    mixins: [PersistentStateMixin, ResponsiveMixin],
+    mixins: [ResponsiveMixin, PersistentStateMixin],
 
     getInitialState: function () {
         return {
@@ -33,8 +33,6 @@ let Tabs = React.createClass({
             if (typeof this.props.indexChanged == 'function') {
                 this.props.indexChanged(idx);
             }
-
-            this.restoreContentState();
         });
     },
 
@@ -42,27 +40,6 @@ let Tabs = React.createClass({
         this.setState({
             curTab: idx
         }, cbk);
-    },
-
-    restoreContentState() {
-        // restore grid or group state
-        var content = this.refs.activeContent;
-        if (typeof content.restoreState == 'function') {
-            content.restoreState(()=>{
-                if (typeof content.resize == 'function') {
-                    content.resize()
-                }
-            });
-        }
-    },
-
-    // PersistentState mixin hook
-    stateRestored() {
-        this.restoreContentState();
-    },
-
-    componentDidMount() {
-        this.restoreContentState();
     },
 
     render() {
@@ -93,7 +70,8 @@ let Tabs = React.createClass({
             element = children[curTab],
             content = React.addons.cloneWithProps(element, {
                 ref: 'activeContent',
-                key: element.key || `child-${curTab}`
+                key: element.key || `child-${curTab}`,
+                parent: this
             });
         return (
             <div id={this.props.id} className={className}>

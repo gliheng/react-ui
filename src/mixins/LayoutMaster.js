@@ -5,9 +5,6 @@ import GridLayoutManager from './GridLayoutManager';
 import Gutter from '../Gutter';
 
 export var LayoutMaster = {
-    getInitialState() {
-        return {};
-    },
 
     getLayoutManager() {
         if (!this.layoutManager) {
@@ -69,29 +66,6 @@ export var LayoutMaster = {
             spec.push('1');
         }
         return spec.join(',');
-    },
-
-    componentDidMount() {
-        // To render child components, this one needs to know DOM size
-        var $node = this.getDOMNode();
-        if (!('width' in this.state || 'height' in this.state)) {
-            this.setState({
-                width: $node.clientWidth,
-                height: $node.clientHeight
-            });
-        }
-    },
-
-    onResized() {
-        var $node = this.getDOMNode();
-        this.setState({
-            width: $node.clientWidth,
-            height: $node.clientHeight
-        });
-    },
-
-    stateRestored() {
-        this.resize();
     },
 
     /** return size configuration array on an element
