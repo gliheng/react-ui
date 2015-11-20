@@ -8,43 +8,32 @@
             .wrap {
                 margin: 1em;
             }
+            .Content {
+                display: flex;
+            }
         </style>
     </head>
     <body>
         <div class="wrap">
-            <p>Popup can be rendered as a react components, or can be called as an API</p>
-            <button id="btn1">Modal</button>
-            <button id="btn2">Normal</button>
+            <p>Toast can be rendered as a react components, or can be called as an API</p>
+            <button id="btn1">Toast that dismiss after 1sec</button>
+            <button id="btn2">Toast that dismiss after being clicked</button>
         </div>
         <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
         <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
         <script src="../dist/react-ui.js" charset="utf-8"></script>
         <script type="text/jsx">
-            var Popup = ReactUI.Popup;
+            var Toast = ReactUI.Toast;
 
             document.getElementById('btn1').addEventListener('click', function () {
-                function btnClicked(idx, label) {
-                    console.log('button', idx, label, 'was clicked!');
-                    return true;
-                }
-
-                Popup.show({
-                    title: 'Modal Popup',
+                Toast.show({
                     content: <div>Hello!</div>,
-                    btnClicked: btnClicked,
-                    modal: true
+                    duration: 1000
                 });
             });
 
             document.getElementById('btn2').addEventListener('click', function () {
-                function btnClicked(idx, label) {
-                    console.log('button', idx, label, 'was clicked!');
-                    return true;
-                }
-
-                Popup.show({
-                    btnClicked: btnClicked,
-                    title: 'Modal Popup',
+                Toast.show({
                     content: <div>Hello!</div>
                 });
             });

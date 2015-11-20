@@ -4,6 +4,7 @@ import VGroup from './VGroup';
 import View from './View';
 import Grid from './Grid';
 import Tabs from './Tabs';
+import Toast from './Toast';
 import Popup from './Popup';
 import * as Utils from './Utils';
 import {setReader, setWriter} from './mixins/PersistentState';
@@ -40,4 +41,4 @@ function bootstrap(app) {
     return app;
 }
 
-export {HGroup, VGroup, Grid, View, Tabs, Popup, bootstrap, config, Utils};
+export {HGroup, VGroup, Grid, View, Tabs, Popup, Toast, bootstrap, config, Utils};
