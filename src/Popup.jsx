@@ -85,7 +85,7 @@ let Popup = React.createClass({
             className += ' ' + props.className;
         }
         if (props.animated) {
-            className += state.hide ? ' hide' : ' show';
+            className += state.hide ? ' Hide' : ' Show';
         }
 
         var footer = this.renderButtons();

@@ -71,7 +71,7 @@ let Toast = React.createClass({
             className += ' ' + props.className;
         }
         if (props.animated) {
-            className += state.hide ? ' hide' : ' show';
+            className += state.hide ? ' Hide' : ' Show';
         }
 
         var content = React.addons.cloneWithProps(props.children, {

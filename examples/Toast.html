@@ -16,7 +16,7 @@
     <body>
         <div class="wrap">
             <p>Toast can be rendered as a react components, or can be called as an API</p>
-            <button id="btn1">Toast that dismiss after 1sec</button>
+            <button id="btn1">Toast that dismiss after 3sec</button>
             <button id="btn2">Toast that dismiss after being clicked</button>
         </div>
         <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
@@ -28,7 +28,7 @@
             document.getElementById('btn1').addEventListener('click', function () {
                 Toast.show({
                     content: <div>Hello!</div>,
-                    duration: 1000
+                    duration: 3000
                 });
             });
 

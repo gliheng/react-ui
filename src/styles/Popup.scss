@@ -77,13 +77,13 @@
     }
 }
 
-.Toast.show, .Popup.show {
-    animation: show $transition-duration;
+.Toast.Show, .Popup.Show {
+    animation: Show $transition-duration;
     animation-fill-mode: forwards;
     animation-timing-function: ease-out;
 }
-.Toast.hide, .Popup.hide {
-    animation: hide $transition-duration;
+.Toast.Hide, .Popup.Hide {
+    animation: Hide $transition-duration;
     animation-fill-mode: forwards;
     animation-timing-function: ease-in;
 }
