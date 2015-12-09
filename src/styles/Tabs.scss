@@ -22,14 +22,14 @@
         height:$tab-height;
         line-height:$tab-height;
         transition:background-color $transition-duration;
-        .closeBtn {
+        .Close {
             position:absolute;
             top:0;
-            right:4px;
+            right:5px;
+            text-decoration: none;
 
-            opacity:0;
-            visibility:hidden;
-            transition:opacity $transition-duration, visibility 0s linear $transition-duration;
+            opacity:0.4;
+            transition:opacity $transition-duration;
         }
     }
     .Tabs-Bar-Item:hover{
@@ -49,10 +49,8 @@
         background-color:$primary;
     }
     .Tabs-Bar-Item:hover {
-        .closeBtn {
+        .Close {
             opacity:1;
-            visibility:visible;
-            transition:opacity $transition-duration, visibility 0s linear 0s;
         }
         .closeBtn:hover {
             color:$text;

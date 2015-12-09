@@ -27,15 +27,33 @@
         <script type="text/jsx">
             var Tabs = ReactUI.Tabs;
 
-            var ToolBtns = [<a key="1" href="javascript:;">btn1</a>, <a key="2" href="javascript:;">btn2</a>];
-            var app = React.render(
-                <Tabs id="tab" toolBtns={ToolBtns}>
-                    <div className="a" label="tab 1">A</div>
-                    <div className="b" label="tab 2">B</div>
-                    <div className="c" label="tab 3">C</div>
-                </Tabs>,
-                document.getElementById('app')
-            );
+            var ToolBtns = [
+                <a key="1" href="javascript:;">btn1</a>,
+                <a key="2" href="javascript:;">btn2</a>
+            ];
+            var App = React.createClass({
+                getInitialState() {
+                    return {
+                        tabs: [
+                            <div className="a" label="tab 1">A</div>,
+                            <div className="b" label="tab 2">B</div>,
+                            <div className="c" label="tab 3" closeTab={this.closeTab} closable={true}>C</div>
+                        ]
+                    };
+                },
+                closeTab(idx, key, tab) {
+                    this.state.tabs.splice(idx, 1);
+                    this.forceUpdate();
+                },
+                render() {
+                    return (
+                        <Tabs id="tab" toolBtns={ToolBtns} closeTab={this.closeTab}>
+                        {this.state.tabs}
+                        </Tabs>
+                    );
+                }
+            });
+            React.render(<App />, document.getElementById('app'));
         </script>
     </body>
 </html>
