@@ -20,12 +20,34 @@ let Tabs = React.createClass({
             if (isActive) {
                 className += ' active';
             }
-            return <div className={className} data-idx={i} key={i} onClick={this.onTabClick}><span>{tab.label}</span></div>;
+            return (
+                <div className={className} data-idx={i} key={i} onClick={this.onTabClick}>
+                    <span>{tab.label}</span>
+                </div>
+            );
         });
     },
 
+    componentWillReceiveProps(nextProps) {
+        var curTab = nextProps.curTab;
+        if (typeof curTab == 'number') {
+            // curTab changed from outside
+            this.setState({
+                curTab: curTab
+            });
+        }
+    },
+
     onTabClick(evt) {
-        var idx = parseInt(evt.currentTarget.dataset.idx);
+        var idx = parseInt(evt.currentTarget.dataset.idx),
+            {tabClicked} = this.props,
+            preventJump = false;
+        if (typeof tabClicked == 'function') {
+            preventJump = tabClicked(idx, this.props.children[idx].props);
+        }
+
+        if (preventJump) return;
+
         this.setState({
             curTab: idx
         }, ()=> {
@@ -42,12 +64,23 @@ let Tabs = React.createClass({
         }, cbk);
     },
 
+    prevTab(cbk) {
+        this.setState({
+            curTab: Math.max(this.state.curTab-1, 0)
+        }, cbk);
+    },
+
+    nextTab(cbk) {
+        this.setState({
+            curTab: Math.min(this.state.curTab+1, )
+        }, cbk);
+    },
+
     render() {
         var className = 'Tabs',
-            props = this.props,
-            state = this.state;
+            {props, state} = this;
 
-        if (this.props.className) {
+        if (props.className) {
             className += ' ' + props.className;
         }
 
