@@ -1,0 +1,85 @@
+
+$primary-color: #599afc;
+$scrollWidth: 4px;
+
+.Scrollbar {
+    // background-color: black;
+    position: absolute;
+    z-index: 2;
+
+    opacity: 0.6;
+    transition: opacity .6s;
+    .handle {
+        position: absolute;
+        background-color: $primary-color;
+        // border-radius: $scrollWidth / 2;
+        background-clip: content-box;
+        border: none;
+        box-sizing: border-box;
+    }
+}
+.Scrollbar.vertical {
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: $scrollWidth;
+    .handle {
+        width: 100%;
+        height: 0;
+    }
+}
+
+.Scrollbar.horizontal {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: $scrollWidth;
+    .handle {
+        width: 0;
+        height: 100%;
+    }
+}
+
+.ScrollbarOuter {
+    .Scrollbar{
+        opacity: 0;
+    }
+}
+.ScrollbarOuter:hover {
+    .Scrollbar{
+        opacity: 0.6;
+    }
+}
+.Scrollbar:hover {
+    opacity: 1!important;
+}
+
+// $scrollbar-color: #AEA091;
+// $scrollbar-bgcolor: #D5D0C9;
+//
+// /*---滚动条默认显示样式--*/
+// ::-webkit-scrollbar-thumb {
+//    background-color: $scrollbar-color;
+//    -webkit-border-radius: 4px;
+//    border: 1px solid $scrollbar-bgcolor;
+// }
+// /*---鼠标点击滚动条显示样式--*/
+// ::-webkit-scrollbar-thumb:hover{
+// }
+// /*---滚动条大小--*/
+// ::-webkit-scrollbar{
+//    width: 10px;
+//    height: 0px;
+// }
+// /*---滚动框背景样式--*/
+// ::-webkit-scrollbar-track-piece {
+//    background-color: $scrollbar-bgcolor;
+//    -webkit-border-radius:4px;
+// }
+//
+// //IE
+// html {
+//    scrollbar-track-color: $scrollbar-bgcolor;
+//    scrollbar-arrow-color: $scrollbar-color;
+//    scrollbar-face-color: $scrollbar-color;
+// }
