@@ -101,7 +101,8 @@ let Tabs = React.createClass({
 
         var items = [],
             curTab = state.curTab,
-            element;
+            element,
+            firstElement;
         React.Children.forEach(props.children, (c, i)=> {
             // key always exist, id my not
             let id = c.props.id || (''+i);
@@ -114,6 +115,9 @@ let Tabs = React.createClass({
                 icon: c.props.icon,
                 closable: c.props.closable
             };
+            if (i == 0) {
+                firstElement = c;
+            }
         });
         this._items = items;
 
@@ -121,6 +125,7 @@ let Tabs = React.createClass({
         if (!element && items.length > 0) {
             let id = items[0].id;
             this.state.curTab = curTab = id;
+            element = firstElement;
         }
 
         // cloneWithProps does not transfer key or ref to the cloned element.
