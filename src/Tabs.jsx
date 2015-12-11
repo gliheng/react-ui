@@ -133,10 +133,13 @@ let Tabs = React.createClass({
                 parent: this
             });
         }
+
+        var toolBtns = <div className="Tabs-Bar-ToolBtns">{this.props.toolBtns}</div>;
         return (
             <div id={this.props.id} className={className}>
-                <div className="Tabs-Bar">{barItems}
-                    <div className="Tabs-Bar-ToolBtns">{this.props.toolBtns}</div>
+                <div className="Tabs-Bar">
+                    {barItems}
+                    {toolBtns}
                 </div>
                 <div className="Tabs-Content">{content}</div>
             </div>
