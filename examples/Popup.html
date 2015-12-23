@@ -23,7 +23,7 @@
             var Popup = ReactUI.Popup;
 
             document.getElementById('btn1').addEventListener('click', function () {
-                function btnClicked(idx, label) {
+                function onBtnClick(idx, label) {
                     console.log('button', idx, label, 'was clicked!');
                     return true;
                 }
@@ -31,19 +31,19 @@
                 Popup.show({
                     title: 'Modal Popup',
                     content: <div>Hello!</div>,
-                    btnClicked: btnClicked,
+                    onBtnClick: onBtnClick,
                     modal: true
                 });
             });
 
             document.getElementById('btn2').addEventListener('click', function () {
-                function btnClicked(idx, label) {
+                function onBtnClick(idx, label) {
                     console.log('button', idx, label, 'was clicked!');
                     return true;
                 }
 
                 Popup.show({
-                    btnClicked: btnClicked,
+                    onBtnClick: onBtnClick,
                     title: 'Modal Popup',
                     content: <div>Hello!</div>
                 });
