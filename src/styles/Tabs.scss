@@ -1,11 +1,25 @@
 @import "variables";
 
+.Tabs.OverflowMenu .Tabs-Bar-Item-Container {
+    overflow: hidden;
+}
+
 .Tabs-Bar {
+    display: flex;
     height: $tab-height;
     // -webkit-app-region:drag;
     a {
         color:silver;
     }
+    .Tabs-Bar-Outer {
+        display: inline-flex;
+        flex: 1;
+    }
+    .Tabs-Bar-Item-Container {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
     .Tabs-Bar-Item.edit{
         float:right;
     }

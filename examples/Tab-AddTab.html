@@ -43,7 +43,7 @@
                 getInitialState() {
                     this.idx = 0;
                     var tabs = [];
-                    for (var i = 0; i < 10; i++) {
+                    for (var i = 0; i < 20; i++) {
                         tabs.push(this.getTab());
                     }
                     return {
@@ -64,6 +64,9 @@
                             closable={true}>{key}</div>
                     );
                 },
+                resize() {
+                    this.refs.tab.resize()
+                },
                 createTab() {
                     var idx = this.idx;
                     this.state.tabs.push(this.getTab());
@@ -78,7 +81,8 @@
                     );
                 }
             });
-            React.render(<App />, document.getElementById('app'));
+            var app = React.render(<App />, document.getElementById('app'));
+            ReactUI.bootstrap(app);
         </script>
     </body>
 </html>

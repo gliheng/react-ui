@@ -58,7 +58,7 @@ let Menu = React.createClass({
         if (all) {
             var parent = this.props.parent;
             while (parent) {
-                parent.hide();
+                parent.hide(all);
                 parent = parent.props.parent;
             }
         }
@@ -82,15 +82,15 @@ let Menu = React.createClass({
         // call callback
         // after iteration, curr is the root menu
         var cbk = curr.state.cbk;
-        cbk(this.getLabel(idx), path, curr.state.data);
+        cbk(this.getItem(idx), path, curr.state.data);
 
         this.hide(true);
     },
 
-    getLabel(idx) {
-        var options = this.state.options || this.props.options,
-            label = options[idx];
-        return typeof label == 'object'? label.title : label;
+    getItem(idx) {
+        var options = this.state.options || this.props.options;
+        return options[idx];
+        // return typeof label == 'object'? label.title : label;
     },
 
     onMaskClick() {
@@ -172,6 +172,7 @@ export default {
         var $root = getTMPDOMRoot();
         var menu = <Menu />;
         this.menu = React.render(menu, $root);
+        this.hide = this.hide.bind(this);
     },
 
     show: function (evt, config, cbk) {
@@ -181,7 +182,6 @@ export default {
         }
 
         var position;
-
         if (config.position) {
             position = config.position;
         } else {
@@ -200,10 +200,19 @@ export default {
             cbk: (...args)=> {
                 // this is triggered when menu item is clicked
                 cbk.apply(null, args);
+                document.removeEventListener('click', this.hide);
             }
         });
-        document.addEventListener('click', ()=> {
-            this.menu.hide();
-        });
+        document.addEventListener('click', this.hide);
+    },
+
+    hide() {
+        if (!this.menu) return;
+        this.menu.hide();
+
+        var $root = this.menu.getDOMNode().parentNode;
+        React.unmountComponentAtNode($root);
+        $root.parentNode.removeChild($root);
+        this.menu = null;
     }
 };

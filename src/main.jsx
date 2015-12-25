@@ -35,7 +35,7 @@ function bootstrap(app) {
 
     window.addEventListener('resize', function() {
         resize();
-        app.saveState();
+        app.saveState && app.saveState();
     });
 
     resize();

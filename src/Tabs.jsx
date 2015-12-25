@@ -3,55 +3,28 @@ import Gutter from './Gutter';
 import Constants from './Constants';
 import ResponsiveMixin from './mixins/Responsive';
 import PersistentStateMixin from './mixins/PersistentState';
+import Menu from './Menu';
 
 let Tabs = React.createClass({
     mixins: [ResponsiveMixin, PersistentStateMixin],
 
-    getInitialState: function () {
+    getDefaultProps() {
         return {
-            curTab: this.props.curTab
+            // if there's too many tabs, should I compress them or display menu?
+            overflowMode: 'menu'
         };
     },
 
-    renderTabbar: function (items) {
-        return items.map((tab, i)=> {
-            return this.renderTabbarItem(tab, i);
-        });
-    },
-
-    renderTabbarItem(tab, i) {
-        var isActive = tab.id == this.state.curTab;
-        var className = 'Tabs-Bar-Item';
-        if (isActive) {
-            className += ' active';
-        }
-
-        var itemConfig = this._items[i];
-        if (itemConfig) {
-            var {id} = itemConfig;
-            if (id) {
-                className += ` ${id}-Tab`;
-            }
-
-            var closeBtn;
-            if (tab.closable) {
-                closeBtn = (
-                    <a className="Close"
-                        href="javascript:;"
-                        onClick={this.closeTab.bind(null, i, tab.id, this._items[i])}>&times;</a>
-                );
-            }
-        }
-
-        return (
-            <div className={className} data-id={tab.id} data-idx={i} key={i} onClick={this.onTabClick}>
-                <span>{tab.label}</span>{closeBtn}
-            </div>
-        );
+    getInitialState: function () {
+        return {
+            curTab: this.props.curTab,
+            showMore: false
+        };
     },
 
 	closeTab(idx, id, tab, evt) {
 		evt && evt.stopPropagation();
+
         if (id == this.state.curTab) {
             // the current tab is closed
             var tabs = this._items;
@@ -65,6 +38,22 @@ let Tabs = React.createClass({
         }
 		this.props.closeTab.apply(null, arguments);
 	},
+
+    // when tab is resized check if tabs can fix into screen
+    // otherwise show more button
+    onResized() {
+        var $tabContainer = this.refs.tabContainer.getDOMNode(),
+            showMore = $tabContainer.clientWidth < $tabContainer.scrollWidth;
+        if (showMore != this.state.showMore) {
+            this.setState({
+                showMore: showMore
+            }, ()=> {
+                this.fitTabBarScroll(this.state.curTab);
+            });
+        } else {
+            this.fitTabBarScroll(this.state.curTab);
+        }
+    },
 
     componentWillReceiveProps(nextProps) {
         var curTab = nextProps.curTab;
@@ -80,8 +69,10 @@ let Tabs = React.createClass({
         var idx = parseInt(evt.currentTarget.dataset.idx),
             id = evt.currentTarget.dataset.id,
             {createTab, tabClicked} = this.props;
-        if (id == 'add') {
+        if (id == '__add__') {
             createTab();
+        } else if (id == '__more__') {
+            this.showMoreMenu(evt);
         } else {
             if (typeof tabClicked == 'function') {
                 id = tabClicked(id, this._items[idx]) || id;
@@ -92,7 +83,77 @@ let Tabs = React.createClass({
         }
     },
 
+    showMoreMenu(evt) {
+        evt.nativeEvent.stopImmediatePropagation();
+
+        // tabItems's parent node's rect
+        var [left, right] = this.getTabContainerRange();
+        var options = this._items.map(function (item) {
+            return {
+                id: item.id,
+                title: item.label
+            };
+        }).filter((item, i)=> {
+            return this.tabOutofView(item.id, left, right);
+        });
+
+        Menu.show(evt.nativeEvent, {
+            options: options
+        }, (item, path, data)=> {
+            this.setTab(item.id);
+        });
+    },
+
+    getTabContainerRange() {
+        var rect = this.refs.tabContainer.getDOMNode().getBoundingClientRect(),
+           left = rect.left,
+           right = left + rect.width;
+          return [left, right];
+    },
+
+    getTabItemNode(id) {
+        var ref = this.refs['tabItem-' + id];
+        if (!ref) return null;
+        return ref.getDOMNode();
+    },
+
+    tabOutofView(id, left, right) {
+        if (left === undefined || right === undefined) {
+            [left, right] = this.getTabContainerRange();
+        }
+
+        var $node = this.getTabItemNode(id),
+            rect = $node.getBoundingClientRect(),
+            l = rect.left,
+            r = l + rect.width;
+        return r <= left || l > right;
+    },
+
+    componentDidUpdate() {
+        this.resize();
+        this.fitTabBarScroll(this.state.curTab);
+    },
+
+    fitTabBarScroll(id) {
+        if (!this.getTabItemNode(id) || !this.tabOutofView(id)) {
+            return;
+        }
+
+        var $tabContainer = this.refs.tabContainer.getDOMNode(),
+            rect = $tabContainer.getBoundingClientRect(),
+            left = rect.left;
+
+        var $node = this.getTabItemNode(id);
+        if (!$node) return;
+        var rect = $node.getBoundingClientRect(),
+            l = rect.left;
+
+        $tabContainer.scrollLeft += l - left;
+    },
+
     setTab(id, cbk) {
+        this.fitTabBarScroll(id);
+
         this.setState({
             curTab: id
         }, ()=> {
@@ -104,7 +165,7 @@ let Tabs = React.createClass({
         });
     },
 
-    extract(curTab) {
+    extractChildren(curTab) {
         var element, firstElement, items = [];
         React.Children.forEach(this.props.children, (c, i)=> {
             // key always exist, id my not
@@ -134,6 +195,47 @@ let Tabs = React.createClass({
         return [element, items];
     },
 
+    renderTabbar: function (items) {
+        return (
+            <div ref="tabContainer" className="Tabs-Bar-Item-Container">
+                {items.map((tab, i)=> {
+                    return this.renderTabbarItem(tab, i);
+                })}
+            </div>
+        );
+    },
+
+    renderTabbarItem(tab, i) {
+        var isActive = tab.id == this.state.curTab;
+        var className = 'Tabs-Bar-Item';
+        if (isActive) {
+            className += ' active';
+        }
+
+        var itemConfig = this._items[i];
+        if (itemConfig) {
+            var {id} = itemConfig;
+            if (id) {
+                className += ` Tab-${id}`;
+            }
+
+            var closeBtn;
+            if (tab.closable) {
+                closeBtn = (
+                    <a className="Close"
+                        href="javascript:;"
+                        onClick={this.closeTab.bind(null, i, tab.id, this._items[i])}>&times;</a>
+                );
+            }
+        }
+
+        return (
+            <div className={className} ref={'tabItem-' + tab.id} data-id={tab.id} data-idx={i} key={i} onClick={this.onTabClick}>
+                <span>{tab.label}</span>{closeBtn}
+            </div>
+        );
+    },
+
     render() {
         var className = 'Tabs',
             {props, state} = this;
@@ -142,9 +244,15 @@ let Tabs = React.createClass({
             className += ' ' + props.className;
         }
 
+        if (props.overflowMode == 'menu') {
+            className += ' OverflowMenu';
+        } else if (props.overflowMode == 'compress') {
+            className += ' OverflowCompress';
+        }
+
         // extract item from tabs
         var curTab = state.curTab;
-        var [contentElement, items] = this.extract(curTab);
+        var [contentElement, items] = this.extractChildren(curTab);
 
         // cloneWithProps does not transfer key or ref to the cloned element.
         var barItems = this.renderTabbar(items),
@@ -157,21 +265,30 @@ let Tabs = React.createClass({
             });
         }
 
+        // if too many tabs are shown, this group them into menu
+        var moreTab;
+        if (props.overflowMode == 'menu' && this.state.showMore) {
+            moreTab = this.renderTabbarItem({label: '⋮', id: '__more__'});
+        }
+
         // optional add button to create more tabs
         var addTab;
         if (this.props.createTab) {
-            addTab = this.renderTabbarItem({label: '╋', id: 'add'});
+            addTab = this.renderTabbarItem({label: '╋', id: '__add__'});
         }
 
         var toolBtns = <div className="Tabs-Bar-ToolBtns">{this.props.toolBtns}</div>;
         return (
             <div id={this.props.id} className={className}>
-                <div className="Tabs-Bar">
-                    {barItems}
-                    {addTab}
+                <div ref="tabBar" className="Tabs-Bar">
+                    <div className="Tabs-Bar-Outer">
+                        {barItems}
+                        {moreTab}
+                        {addTab}
+                    </div>
                     {toolBtns}
                 </div>
-                <div className="Tabs-Content">{content}</div>
+                <div ref="tabContent" className="Tabs-Content">{content}</div>
             </div>
         );
     }
