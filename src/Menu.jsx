@@ -1,12 +1,8 @@
-import $ from 'jquery';
-import _ from 'underscore';
 import React from 'react';
 
-import {getIcon} from '../utils/';
-import Mask from './Mask';
+import Constants from './Constants';
+import {getTMPDOMRoot, extend} from './Utils';
 
-const MENU_ITEM_WIDTH = 87,
-    MENU_ITEM_HEIGHT = 28;
 let Menu = React.createClass({
     getInitialState() {
         return {
@@ -21,22 +17,25 @@ let Menu = React.createClass({
             docTop = 0;
         if (!config) {
             // relative position of the menu's parent menu item
-            var {left: docLeft, top: docTop} = $(this.getDOMNode().parentNode).offset();
+            var rect = this.getDOMNode().parentNode.getBoundingClientRect();
+            var {left: docLeft, top: docTop} = rect;
         }
 
-        if (docLeft + left + MENU_ITEM_WIDTH > document.documentElement.clientWidth) {
-            left -= MENU_ITEM_WIDTH;
+        if (docLeft + left + Constants.config.menuItemWidth > document.documentElement.clientWidth) {
+            // can't fit right, invert direction
+            left -= Constants.config.menuItemWidth;
         } else {
             left += 2;
         }
 
         var options = config ? config.options : this.props.options,
-            menuHeight = options.length * MENU_ITEM_HEIGHT
+            menuHeight = options.length * Constants.config.menuItemHeight;
         if (docTop + top + menuHeight > document.documentElement.clientHeight) {
-            top -= (options.length - 1) * MENU_ITEM_HEIGHT;
+            // can't fit bottom, invert direction
+            top -= (options.length - 1) * Constants.config.menuItemHeight;
         }
 
-        this.setState(_.extend({
+        this.setState(extend({
             show: true,
             position: {
                 top: top,
@@ -69,7 +68,7 @@ let Menu = React.createClass({
         evt.stopPropagation();
 
         // iteratively get click path
-        var idx = parseInt($(evt.currentTarget).data('idx')),
+        var idx = parseInt(evt.currentTarget.dataset['idx']),
             curr = this,
             parent = this.props.parent,
             path = [idx];
@@ -99,7 +98,7 @@ let Menu = React.createClass({
     },
 
     onHoverMenuItem(evt) {
-        var idx = $(evt.currentTarget).data('idx'),
+        var idx = evt.currentTarget.dataset['idx'],
             com = this.refs[`child-${idx}`],
             $node = this.getDOMNode();
 
@@ -110,9 +109,39 @@ let Menu = React.createClass({
     },
 
     onLeaveMenuItem(evt) {
-        var idx = $(evt.currentTarget).data('idx');
+        var idx = evt.currentTarget.dataset['idx'],
             com = this.refs[`child-${idx}`];
         if (com) com.hide();
+    },
+
+    renderMenuItem(option, idx) {
+        var label = option,
+            style,
+            subMenu;
+
+        if (label == '__seperator__') {
+            return <li className="sep" />;
+        }
+
+        if (typeof option == 'object') {
+            // generate children
+            label = [option.title];
+            if (Array.isArray(option.children)) {
+                label.push(<i className="ico">&gt;</i>);
+                subMenu = <Menu ref={`child-${idx}`} idx={idx} options={option.children} parent={this}/>;
+            }
+            style = option.style;
+        }
+
+        var item = <li
+            key={idx}
+            style={style}
+            data-idx={idx}
+            onMouseEnter={this.onHoverMenuItem}
+            onMouseLeave={this.onLeaveMenuItem}
+            onClick={this.onClick}>{label}{subMenu}</li>
+
+        return item;
     },
 
     render() {
@@ -121,39 +150,7 @@ let Menu = React.createClass({
             position = this.state.position || this.props.position,
             contents;
         if (this.state.show) {
-            var idx = 0;
-            var items = options.map((option)=> {
-                var label = option,
-                    className = idx == this.state.current? 'on' : '',
-                    style,
-                    subMenu;
-
-                if (label == '__seperator__') {
-                    return <li className="sep" />;
-                }
-
-                if (typeof option == 'object') {
-                    // generate children
-                    label = [option.title];
-                    if (_.isArray(option.children)) {
-                        label.push(<i className="ico">{getIcon('svg:./images/svg/sprite.symbol.svg#arrow_r')}</i>);
-                        subMenu = <Menu ref={`child-${idx}`} idx={idx} options={option.children} parent={this}/>;
-                    }
-                    style = option.style;
-                }
-
-                var item = <li
-                    key={idx}
-                    style={style}
-                    className={className}
-                    data-idx={idx}
-                    onMouseEnter={this.onHoverMenuItem}
-                    onMouseLeave={this.onLeaveMenuItem}
-                    onClick={this.onClick}>{label}{subMenu}</li>
-
-                idx += 1;
-                return item;
-            });
+            var items = options.map(this.renderMenuItem);
 
             contents = (
                 <div className="list">
@@ -172,33 +169,24 @@ let Menu = React.createClass({
 
 export default {
     init: function () {
+        var $root = getTMPDOMRoot();
         var menu = <Menu />;
-        var $root = document.createElement('div');
-        document.body.appendChild($root);
-
         this.menu = React.render(menu, $root);
-        this.mask = new Mask({
-            backgroundColor: 'rgba(0,0,0,0)'
-        });
     },
 
     show: function (evt, config, cbk) {
         if (!this.menu) {
+            // singleton, lazy initialization
             this.init();
         }
 
-        var $tar = $(evt.target),
-            position;
+        var position;
 
         if (config.position) {
             position = config.position;
         } else {
             var x = evt.clientX,
                 y = evt.clientY;
-            // var height = $tar.height(),
-            //     pos = $tar.position(),
-            //     x = pos.top + height,
-            //     y = pos.left;
 
             position = {
                 top: y,
@@ -207,17 +195,14 @@ export default {
         }
 
         this.menu.showAt(position, {
-            current: config.current,
             options: config.options,
             data: config.data,
             cbk: (...args)=> {
                 // this is triggered when menu item is clicked
                 cbk.apply(null, args);
-                this.mask.hide();
             }
         });
-
-        this.mask.show(()=> {
+        document.addEventListener('click', ()=> {
             this.menu.hide();
         });
     }

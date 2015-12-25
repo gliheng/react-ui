@@ -1,5 +1,7 @@
 
-$menu_bg: #ece9fa;
+$menu_text: #333;
+$menu_hover_bg: rgb(41, 138, 251);
+$menu_bg: white;
 $item_height: 30px;
 $radius: 4px;
 .Menu {
@@ -11,6 +13,11 @@ $radius: 4px;
         box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
         border-radius: $radius;
         cursor: default;
+        box-shadow: 1px 1px 3px rgba(black, 0.3);
+        ul {
+            margin: 0;
+            padding: 0;
+        }
         li {
             position: relative;
             padding: 0 3em 0 1.6em;
@@ -21,16 +28,13 @@ $radius: 4px;
             min-width: 5em;
             max-width: 10em;
             box-sizing: border-box;
-            color: $text;
+            color: $menu_text;
             i {
                 position: absolute;
                 right: .4em;
                 line-height: $item_height;
                 transform: scale(0.4);
-                color: $text;
-                svg {
-                    fill: $gray-text;
-                }
+                color: $menu_text;
             }
         }
         li.on::before {
@@ -40,7 +44,7 @@ $radius: 4px;
         }
         li:hover {
             color: white;
-            background-color: $primary-color;
+            background-color: $menu_hover_bg;
         }
         li:first-child:hover {
             border-radius: $radius $radius 0 0;
