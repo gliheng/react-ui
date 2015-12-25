@@ -8,13 +8,7 @@ let Popup = React.createClass({
         show: function (args) {
             var $root = getTMPDOMRoot(args.modal);
             var popup = (
-                <Popup
-                    id={args.id}
-                    className={args.className}
-                    buttons={args.buttons}
-                    title={args.title}
-                    animated={args.animated}
-                    onBtnClick={args.btnClicked}>
+                <Popup {...args}>
                     {args.content}
                 </Popup>
             );
@@ -72,6 +66,9 @@ let Popup = React.createClass({
     },
 
     destroy() {
+        if (typeof this.props.popupWillClose == 'function') {
+            this.props.popupWillClose();
+        }
         var $root = this.getDOMNode().parentNode;
         React.unmountComponentAtNode($root);
         $root.parentNode.removeChild($root);

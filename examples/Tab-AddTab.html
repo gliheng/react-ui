@@ -17,6 +17,9 @@
             #tab .Tabs-Content > div {
                 height: 100%;
             }
+            #tab .Tabs-Bar .Tabs-Bar-ToolBtns a {
+                margin-left: 5px;
+            }
         </style>
     </head>
     <body>
@@ -27,29 +30,49 @@
         <script type="text/jsx">
             var Tabs = ReactUI.Tabs;
 
-            var ToolBtns = (
-                <div>
-                    <a href="javascript:;">button1</a>
-                    <a href="javascript:;">button2</a>
-                </div>
-            );
+            var ToolBtns = React.createClass({
+                render() {
+                    return <div>
+                        <a href="javascript:;">Button1</a>
+                        <a href="javascript:;">Button2</a>
+                    </div>
+                }
+            });
+
             var App = React.createClass({
                 getInitialState() {
+                    this.idx = 0;
+                    var tabs = [];
+                    for (var i = 0; i < 10; i++) {
+                        tabs.push(this.getTab());
+                    }
                     return {
-                        tabs: [
-                            <div className="a" label="tab a">A</div>,
-                            <div className="b" label="tab b">B</div>,
-                            <div className="c" label="tab c" closeTab={this.closeTab} closable={true}>C</div>
-                        ]
+                        tabs: tabs
                     };
                 },
                 closeTab(idx, key, tab) {
                     this.state.tabs.splice(idx, 1);
                     this.forceUpdate();
                 },
+                getTab() {
+                    var key = 'tab ' + this.idx++;
+                    return (
+                        <div id={key}
+                            className='tab-content'
+                            label={key}
+                            closeTab={this.closeTab}
+                            closable={true}>{key}</div>
+                    );
+                },
+                createTab() {
+                    var idx = this.idx;
+                    this.state.tabs.push(this.getTab());
+                    this.refs.tab.setTab('tab ' + idx);
+                    this.forceUpdate();
+                },
                 render() {
                     return (
-                        <Tabs id="tab" closeTab={this.closeTab}>
+                        <Tabs id="tab" ref="tab" toolBtns={<ToolBtns />} closeTab={this.closeTab} createTab={this.createTab}>
                         {this.state.tabs}
                         </Tabs>
                     );

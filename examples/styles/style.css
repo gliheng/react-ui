@@ -8,13 +8,14 @@ html, body, #app{
     overflow: hidden;
 }
 
-.a, .b, .c, .d, .e, .f, .g, .h, .i {
+.tab-content, .a, .b, .c, .d, .e, .f, .g, .h, .i {
     display: flex;
     text-align: center;
     align-items: center;
     justify-content: center;
     font-size: 2em;
     color: white;
+    background-color: #333;
 }
 .a {background-color: #B0FF7B;}
 .b {background-color: #51E8E8;}

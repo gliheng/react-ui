@@ -20,7 +20,7 @@ export var LayoutMaster = {
     },
 
     getGutter() {
-        return this.props.resizable ? this.props.gutter || Constants.config.gutterWidth : 0;
+        return this.props.gutterWidth === undefined? Constants.config.gutterWidth : this.props.gutterWidth;
     },
 
     renderGutters(h, pos) {

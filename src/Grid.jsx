@@ -46,8 +46,7 @@ let Grid = React.createClass({
             state.colprecise,
             state.rowprecise,
             width,
-            height,
-            props.gutterWidth);
+            height);
 
         if (dimension) {
             var [colsize, rowsize, colpos, rowpos] = dimension;
