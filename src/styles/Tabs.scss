@@ -1,9 +1,5 @@
 @import "variables";
 
-.Tabs.OverflowMenu .Tabs-Bar-Item-Container {
-    overflow: hidden;
-}
-
 .Tabs-Bar {
     display: flex;
     height: $tab-height;
@@ -18,6 +14,7 @@
     .Tabs-Bar-Item-Container {
         display: inline-block;
         white-space: nowrap;
+        overflow: hidden;
     }
 
     .Tabs-Bar-Item.edit{

@@ -8,13 +8,6 @@ import Menu from './Menu';
 let Tabs = React.createClass({
     mixins: [ResponsiveMixin, PersistentStateMixin],
 
-    getDefaultProps() {
-        return {
-            // if there's too many tabs, should I compress them or display menu?
-            overflowMode: 'menu'
-        };
-    },
-
     getInitialState: function () {
         return {
             curTab: this.props.curTab,
@@ -43,7 +36,8 @@ let Tabs = React.createClass({
     // otherwise show more button
     onResized() {
         var $tabContainer = this.refs.tabContainer.getDOMNode(),
-            showMore = $tabContainer.clientWidth < $tabContainer.scrollWidth;
+            // showMore = $tabContainer.clientWidth < $tabContainer.scrollWidth;
+            showMore = this.outofViewTabs().length > 0;
         if (showMore != this.state.showMore) {
             this.setState({
                 showMore: showMore
@@ -86,17 +80,7 @@ let Tabs = React.createClass({
     showMoreMenu(evt) {
         evt.nativeEvent.stopImmediatePropagation();
 
-        // tabItems's parent node's rect
-        var [left, right] = this.getTabContainerRange();
-        var options = this._items.map(function (item) {
-            return {
-                id: item.id,
-                title: item.label
-            };
-        }).filter((item, i)=> {
-            return this.tabOutofView(item.id, left, right);
-        });
-
+        var options = this.outofViewTabs();
         Menu.show(evt.nativeEvent, {
             options: options
         }, (item, path, data)=> {
@@ -117,6 +101,19 @@ let Tabs = React.createClass({
         return ref.getDOMNode();
     },
 
+    outofViewTabs() {
+        // tabItems's parent node's rect
+        var [left, right] = this.getTabContainerRange();
+        return this._items.map(function (item) {
+            return {
+                id: item.id,
+                title: item.label
+            };
+        }).filter((item, i)=> {
+            return this.tabOutofView(item.id, left, right);
+        });
+    },
+
     tabOutofView(id, left, right) {
         if (left === undefined || right === undefined) {
             [left, right] = this.getTabContainerRange();
@@ -134,6 +131,7 @@ let Tabs = React.createClass({
         this.fitTabBarScroll(this.state.curTab);
     },
 
+    /* move scrollleft of tabs parent, so that items are visible */
     fitTabBarScroll(id) {
         if (!this.getTabItemNode(id) || !this.tabOutofView(id)) {
             return;
@@ -146,11 +144,12 @@ let Tabs = React.createClass({
         var $node = this.getTabItemNode(id);
         if (!$node) return;
         var rect = $node.getBoundingClientRect(),
-            l = rect.left;
+            l = rect.left - parseInt(window.getComputedStyle($node).getPropertyValue('margin-left'));
 
         $tabContainer.scrollLeft += l - left;
     },
 
+    /* set current active tab */
     setTab(id, cbk) {
         this.fitTabBarScroll(id);
 
@@ -244,12 +243,6 @@ let Tabs = React.createClass({
             className += ' ' + props.className;
         }
 
-        if (props.overflowMode == 'menu') {
-            className += ' OverflowMenu';
-        } else if (props.overflowMode == 'compress') {
-            className += ' OverflowCompress';
-        }
-
         // extract item from tabs
         var curTab = state.curTab;
         var [contentElement, items] = this.extractChildren(curTab);
@@ -267,7 +260,7 @@ let Tabs = React.createClass({
 
         // if too many tabs are shown, this group them into menu
         var moreTab;
-        if (props.overflowMode == 'menu' && this.state.showMore) {
+        if (this.state.showMore) {
             moreTab = this.renderTabbarItem({label: '⋮', id: '__more__'});
         }
 
@@ -283,8 +276,8 @@ let Tabs = React.createClass({
                 <div ref="tabBar" className="Tabs-Bar">
                     <div className="Tabs-Bar-Outer">
                         {barItems}
-                        {moreTab}
                         {addTab}
+                        {moreTab}
                     </div>
                     {toolBtns}
                 </div>
