@@ -274,7 +274,7 @@ let Tabs = React.createClass({
         return (
             <div id={this.props.id} className={className}>
                 <div ref="tabBar" className="Tabs-Bar">
-                    <div className="Tabs-Bar-Outer">
+                    <div className={'Tabs-Bar-Outer' + (this.state.showMore? ' showMore' : '')}>
                         {barItems}
                         {addTab}
                         {moreTab}
