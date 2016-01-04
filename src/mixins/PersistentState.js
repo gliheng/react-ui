@@ -1,3 +1,7 @@
+/*
+ * State are automaticly saved, unless noPersist props is passed.
+ */
+
 import React from 'react';
 import {noop, clone, exclude, empty} from '../Utils';
 
@@ -64,8 +68,8 @@ export default {
     saveState() {
         var id = this.props.id;
         // only component with id attribute can save state
-        if (!id) {
-            console.warn('Only component with id attribute can save state');
+        if (!id || this.props.noPersist) {
+            // console.warn('Only component with id attribute can save state');
             return;
         }
         var s = this.getState(true);
@@ -76,8 +80,8 @@ export default {
      */
     restoreState() {
         var id = this.props.id;
-        if (!id) {
-            console.warn('Only component with id attribute can save state');
+        if (!id || this.props.noPersist) {
+            // console.warn('Only component with id attribute can save state');
             return;
         }
         var state = reader(id);
