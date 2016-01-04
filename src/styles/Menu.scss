@@ -31,9 +31,8 @@ $radius: 4px;
             color: $menu_text;
             i {
                 position: absolute;
-                right: .4em;
+                right: 1em;
                 line-height: $item_height;
-                transform: scale(0.4);
                 color: $menu_text;
             }
         }
@@ -57,5 +56,24 @@ $radius: 4px;
             background-color: #ddd;
             margin-left: 1.6em;
         }
+    }
+
+    .ico.gt {
+        display: block;
+        top: 50%;
+        margin-top: -5px;
+        width: 10px;
+        height: 10px;
+    }
+    .ico.gt::after {
+        content: "";
+        display: block;
+        width: 8px;
+        height: 8px;
+        border: 2px solid black;
+        border-width: 1px 1px 0 0;
+        top: 0;
+        left: 0;
+        transform: rotate(45deg);
     }
 }

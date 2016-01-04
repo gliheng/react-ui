@@ -1,10 +1,13 @@
 export default {
     getInitialState() {
+        // this is here to ensure state is not null
         return {};
     },
 
     /** notify children when resized */
     resize(width, height) {
+        // if the caller specify width and height, we just apply that size
+        // otherwise we take the size from cache(state or props) and propagate the event down
         if (width === undefined && height === undefined) {
             if (this.state && 'width' in this.state && 'height' in this.state) {
                 ({width, height} = this.state);

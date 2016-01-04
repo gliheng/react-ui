@@ -12,7 +12,8 @@ export default {
         gutterWidth: 4,
         persistState: true,
         menuItemWidth: 87,
-        menuItemHeight: 28,
+        menuItemHeight: 30,
+        menuSepItemHeight: 1,
         persistFunc: function () {
             return [
                 (id)=> JSON.parse(localStorage[`ui-persist:${id}`] || '{}'),

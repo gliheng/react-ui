@@ -3,6 +3,7 @@ import React from 'react';
 import Constants from './Constants';
 import {getTMPDOMRoot, extend} from './Utils';
 
+const SEP = '__seperator__';
 let Menu = React.createClass({
     getInitialState() {
         return {
@@ -32,7 +33,12 @@ let Menu = React.createClass({
             menuHeight = options.length * Constants.config.menuItemHeight;
         if (docTop + top + menuHeight > document.documentElement.clientHeight) {
             // can't fit bottom, invert direction
-            top -= (options.length - 1) * Constants.config.menuItemHeight;
+            var itemSize = options.filter(function (opt) {
+                return opt != SEP;
+            }).length;
+            var menuHeight = itemSize * Constants.config.menuItemHeight
+                + (options.length - itemSize) * Constants.config.menuSepItemHeight;
+            top -= menuHeight;
         }
 
         this.setState(extend({
@@ -119,15 +125,15 @@ let Menu = React.createClass({
             style,
             subMenu;
 
-        if (label == '__seperator__') {
-            return <li className="sep" />;
+        if (label == SEP) {
+            return [<li className="sep" />, idx];
         }
 
         if (typeof option == 'object') {
             // generate children
             label = [option.title];
             if (Array.isArray(option.children)) {
-                label.push(<i className="ico">&gt;</i>);
+                label.push(<i className="ico gt"></i>);
                 subMenu = <Menu ref={`child-${idx}`} idx={idx} options={option.children} parent={this}/>;
             }
             style = option.style;
@@ -141,7 +147,7 @@ let Menu = React.createClass({
             onMouseLeave={this.onLeaveMenuItem}
             onClick={this.onClick}>{label}{subMenu}</li>
 
-        return item;
+        return [item, ++idx];
     },
 
     render() {
@@ -150,7 +156,12 @@ let Menu = React.createClass({
             position = this.state.position || this.props.position,
             contents;
         if (this.state.show) {
-            var items = options.map(this.renderMenuItem);
+            var idx = 0, item;
+            var items = options.map((item)=> {
+                // For seperators, index should not increase
+                [item, idx] = this.renderMenuItem(item, idx);
+                return item;
+            });
 
             contents = (
                 <div className="list">
