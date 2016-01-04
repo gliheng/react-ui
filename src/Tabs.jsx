@@ -164,6 +164,11 @@ let Tabs = React.createClass({
         });
     },
 
+    /* get current tab */
+    getTab() {
+        return this.state.curTab;
+    },
+
     extractChildren(curTab) {
         var element, firstElement, items = [];
         React.Children.forEach(this.props.children, (c, i)=> {
