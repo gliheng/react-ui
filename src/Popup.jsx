@@ -87,7 +87,8 @@ let Popup = React.createClass({
 
         var footer = this.renderButtons();
         var content = React.addons.cloneWithProps(props.children, {
-            ref: 'content'
+            ref: 'content',
+            parent: this
         });
         return (
             <div id={props.id} className={className}>
