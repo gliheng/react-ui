@@ -1,14 +1,18 @@
 # ReactUI
 
-react-ui a UI library for react. It contains dozens of reusable react components.
+react-ui a UI library for react. It contains dozens of reusable react components,
+including:
 
+Layout modules: These are useful to split screen into multiple regions.
+- HGroup
+- VGroup
+- Grid
+- Tabs
 
-## Features
-- The layout package is done.
-- It includes containers modules (HGroup VGroup and Grid), to easily split screen into multiple panels
-- These containers include gutter to resize panels.
-- API to save and restore layout configuration automaticly.
-
+UI modules
+- Popup
+- Toast
+- Menu
 
 ## Basic Usage
 
@@ -59,27 +63,59 @@ React.render(
 
 - Popup
 
+```js
+Popup.show({
+    title: 'Modal Popup',
+    content: <div>Hello!</div>,
+    onBtnClick: onBtnClick,
+    modal: true
+});
+```
 
-### TODO ###
+- Toast
 
-var frontpage = Layout.createLayout();
-frontpage.show();
+```js
+Toast.show({
+    content: <div>Hello!</div>,
+    duration: 3000
+});
+```
 
-layout.saveLayout()
-layout.restoreLayout()
+- Menu
 
+```js
+document.oncontextmenu = function (evt) {
+    evt.preventDefault();
 
-<Area>
-    <View></View>
-    <View></View>
-    <View></View>
-    <View></View>
-    <View></View>
-</Area>
+    Menu.show(evt, {
+        options: [
+            'Menu Item 1',
+            'Menu Item 2',
+            'Menu Item 3',
+            '__seperator__',
+            {
+                title: 'Menu Group',
+                style: {'color': '#dc5e21'},
+                children: [
+                    'Apple',
+                    'Banana',
+                    'Orange',
+                    '__seperator__',
+                    {
+                        title: 'Meat',
+                        children: [
+                            'Mutton', 'Beaf', 'Pock'
+                        ]
+                    }
+                ]
+            }
+        ]
+    }, contextMenuClick);
+};
+```
 
 ## More Example
 Check out the examples directory
 
 # TODO
-minWidth maxWidth for HGroup and Grid
-when comp is resized, persistent state does not work well
+HGroup, VGroup and Grid does not support minWidth, maxWidth
