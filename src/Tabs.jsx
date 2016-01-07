@@ -35,6 +35,10 @@ let Tabs = React.createClass({
     // when tab is resized check if tabs can fix into screen
     // otherwise show more button
     onResized() {
+        this.checkShowMore();
+    },
+
+    checkShowMore() {
         var $tabContainer = this.refs.tabContainer.getDOMNode(),
             // showMore = $tabContainer.clientWidth < $tabContainer.scrollWidth;
             showMore = this.outofViewTabs().length > 0;
@@ -127,8 +131,7 @@ let Tabs = React.createClass({
     },
 
     componentDidUpdate() {
-        this.resize();
-        this.fitTabBarScroll(this.state.curTab);
+        this.checkShowMore();
     },
 
     /* move scrollleft of tabs parent, so that items are visible */
@@ -199,12 +202,36 @@ let Tabs = React.createClass({
         return [element, items];
     },
 
-    renderTabbar: function (items) {
-        return (
+    renderTabbar: function () {
+        // if too many tabs are shown, this group them into menu
+        var moreTab;
+        if (this.state.showMore) {
+            moreTab = this.renderTabbarItem({label: '⋮', id: '__more__'});
+        }
+
+        // optional add button to create more tabs
+        var addTab;
+        if (this.props.createTab) {
+            addTab = this.renderTabbarItem({label: '╋', id: '__add__'});
+        }
+
+        var barItems = (
             <div ref="tabContainer" className="Tabs-Bar-Item-Container">
-                {items.map((tab, i)=> {
+                {this._items.map((tab, i)=> {
                     return this.renderTabbarItem(tab, i);
                 })}
+            </div>
+        );
+        var toolBtns = <div className="Tabs-Bar-ToolBtns">{this.props.toolBtns}</div>;
+
+        return (
+            <div ref="tabBar" className="Tabs-Bar">
+                <div className={'Tabs-Bar-Outer' + (this.state.showMore? ' showMore' : '')}>
+                    {barItems}
+                    {addTab}
+                    {moreTab}
+                </div>
+                {toolBtns}
             </div>
         );
     },
@@ -252,9 +279,9 @@ let Tabs = React.createClass({
         var curTab = state.curTab;
         var [contentElement, items] = this.extractChildren(curTab);
 
+        var tabbar = this.renderTabbar();
         // cloneWithProps does not transfer key or ref to the cloned element.
-        var barItems = this.renderTabbar(items),
-            content;
+        var content;
         if (contentElement) {
             content = React.addons.cloneWithProps(contentElement, {
                 ref: 'activeContent',
@@ -263,29 +290,9 @@ let Tabs = React.createClass({
             });
         }
 
-        // if too many tabs are shown, this group them into menu
-        var moreTab;
-        if (this.state.showMore) {
-            moreTab = this.renderTabbarItem({label: '⋮', id: '__more__'});
-        }
-
-        // optional add button to create more tabs
-        var addTab;
-        if (this.props.createTab) {
-            addTab = this.renderTabbarItem({label: '╋', id: '__add__'});
-        }
-
-        var toolBtns = <div className="Tabs-Bar-ToolBtns">{this.props.toolBtns}</div>;
         return (
             <div id={this.props.id} className={className}>
-                <div ref="tabBar" className="Tabs-Bar">
-                    <div className={'Tabs-Bar-Outer' + (this.state.showMore? ' showMore' : '')}>
-                        {barItems}
-                        {addTab}
-                        {moreTab}
-                    </div>
-                    {toolBtns}
-                </div>
+                {tabbar}
                 <div ref="tabContent" className="Tabs-Content">{content}</div>
             </div>
         );
