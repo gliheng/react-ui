@@ -159,8 +159,8 @@ let Tabs = React.createClass({
         this.setState({
             curTab: id
         }, ()=> {
-            if (typeof this.props.indexChanged == 'function') {
-                this.props.indexChanged(id);
+            if (typeof this.props.tabChanged == 'function') {
+                this.props.tabChanged(id);
             }
             cbk && cbk();
             this.saveState();
