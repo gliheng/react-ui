@@ -1,6 +1,6 @@
-# ReactUI
+# ReactUI [![npm version](https://img.shields.io/npm/v/x-react-ui.svg?style=flat)](https://www.npmjs.com/package/x-react-ui)
 
-react-ui a UI library for react. It contains dozens of reusable react components,
+x-react-ui a UI library for react. It contains dozens of reusable react components,
 including:
 
 Layout modules: These are useful to split screen into multiple regions.
