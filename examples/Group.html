@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ReactUI Group Demo</title>
+        <link rel="stylesheet" href="styles/style.css" charset="utf-8">
+        <style media="screen">
+            #group {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
+        <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
+        <script src="../dist/react-ui.js" charset="utf-8"></script>
+        <script type="text/jsx">
+            var VGroup = ReactUI.VGroup,
+                HGroup = ReactUI.HGroup,
+                View = ReactUI.View;
+
+            var app = React.render(
+                <VGroup id="group">
+                    <HGroup flex={2}>
+                        <View className="a" width={400}>left</View>
+                        <VGroup resizable={true}>
+                            <View className="b">top of middle</View>
+                            <HGroup resizable={true}>
+                                <View className="c">bottom of middle</View>
+                                <View className="d">bottom of middle</View>
+                                <View className="e">bottom of middle</View>
+                            </HGroup>
+                        </VGroup>
+                        <View className="f" width={200}>right</View>
+                    </HGroup>
+                    <View className="g">bottom</View>
+                </VGroup>,
+                document.getElementById('app')
+            );
+            ReactUI.bootstrap(app);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ReactUI demo</title>
+        <link rel="stylesheet" href="styles/style.css" charset="utf-8">
+        <style media="screen">
+            #tab{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            #tab .Tabs-Content {
+                flex: 1;
+            }
+            #tab .Tabs-Content > div {
+                height: 100%;
+            }
+            #grid-demo {
+                position: relative;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
+        <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
+        <script src="../dist/react-ui.js" charset="utf-8"></script>
+        <script type="text/jsx">
+            var Tabs = ReactUI.Tabs,
+                Grid = ReactUI.Grid,
+                VGroup = ReactUI.VGroup,
+                HGroup = ReactUI.HGroup,
+                View = ReactUI.View;
+
+            var app = React.render(
+                <Tabs id="tab">
+                    <VGroup label="Group">
+                        <HGroup flex={2}>
+                            <View className="a" width={400}>left</View>
+                            <VGroup resizable={true}>
+                                <View className="b">top of middle</View>
+                                <HGroup resizable={false}>
+                                    <View className="c">bottom of middle</View>
+                                    <View className="d">bottom of middle</View>
+                                    <View className="e">bottom of middle</View>
+                                </HGroup>
+                            </VGroup>
+                            <View className="f" width={200}>right</View>
+                        </HGroup>
+                        <View className="g">bottom</View>
+                    </VGroup>
+
+                    <Grid label="Grid" rows="3" cols="3" colsize="200px,1,1" rowsize="2,1,2">
+                        <View className="a" row="0" col="0">A</View>
+                        <View className="b" row="0" col="1">B</View>
+                        <View className="c" row="0" col="2">C</View>
+                        <View className="d" row="1" col="0">D</View>
+                        <View className="e" row="1" col="1">E</View>
+                        <View className="f" row="1" col="2">F</View>
+                        <View className="g" row="2" col="0">G</View>
+                        <View className="h" row="2" col="1">H</View>
+                        <View className="i" row="2" col="2">I</View>
+                    </Grid>
+
+                    <div label="Area">TODO</div>
+
+                    <HGroup label="Composite">
+                        <View className="g">left</View>
+                        <Grid rows="2" cols="3">
+                            <View className="a" row="0" col="0">A</View>
+                            <View className="b" row="0" col="1">B</View>
+                            <View className="c" row="0" col="2">C</View>
+                            <View className="d" row="1" col="0">D</View>
+                            <View className="e" row="1" col="1">E</View>
+                            <View className="f" row="1" col="2">F</View>
+                        </Grid>
+                    </HGroup>
+                </Tabs>,
+                document.getElementById('app')
+            );
+
+            ReactUI.bootstrap(app);
+        </script>
+    </body>
+</html>

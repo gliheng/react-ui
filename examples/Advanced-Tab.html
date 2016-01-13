@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ReactUI Tab Demo</title>
+        <link rel="stylesheet" href="styles/style.css" charset="utf-8">
+        <style media="screen">
+            #tab{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            #tab .Tabs-Content {
+                flex: 1;
+            }
+            #tab .Tabs-Content > div {
+                height: 100%;
+            }
+            #tab .Tabs-Bar .Tabs-Bar-ToolBtns a {
+                margin-left: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
+        <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
+        <script src="../dist/react-ui.js" charset="utf-8"></script>
+        <script type="text/jsx">
+            var Tabs = ReactUI.Tabs;
+
+            var ToolBtns = React.createClass({
+                render() {
+                    return <div>
+                        <a href="javascript:;">Button1</a>
+                        <a href="javascript:;">Button2</a>
+                    </div>
+                }
+            });
+
+            var App = React.createClass({
+                getInitialState() {
+                    this.idx = 0;
+                    var tabs = [];
+                    for (var i = 0; i < 20; i++) {
+                        tabs.push(this.getTab());
+                    }
+                    return {
+                        tabs: tabs
+                    };
+                },
+                closeTab(idx, key, tab) {
+                    this.state.tabs.splice(idx, 1);
+                    this.forceUpdate();
+                },
+                getTab() {
+                    var key = 'tab ' + this.idx++;
+                    return (
+                        <div id={key}
+                            className='tab-content'
+                            label={key}
+                            closeTab={this.closeTab}
+                            closable={true}>{key}</div>
+                    );
+                },
+                resize() {
+                    this.refs.tab.resize()
+                },
+                createTab() {
+                    var idx = this.idx;
+                    this.state.tabs.push(this.getTab());
+                    this.refs.tab.setTab('tab ' + idx);
+                    this.forceUpdate();
+                },
+                render() {
+                    return (
+                        <Tabs id="tab" ref="tab" toolBtns={<ToolBtns />} closeTab={this.closeTab} createTab={this.createTab}>
+                        {this.state.tabs}
+                        </Tabs>
+                    );
+                }
+            });
+            var app = React.render(<App />, document.getElementById('app'));
+            ReactUI.bootstrap(app);
+        </script>
+    </body>
+</html>
