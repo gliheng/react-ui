@@ -14,6 +14,8 @@ UI modules
 - Toast
 - Menu
 
+Click here for [Demo](http://gliheng.github.io/react-ui/examples/)!
+
 ## Basic Usage
 
 - HGroup, VGroup
