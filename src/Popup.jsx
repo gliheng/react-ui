@@ -18,6 +18,7 @@ let Popup = React.createClass({
 
     getDefaultProps() {
         return {
+            closable: true,
             animated: true,
             buttons: ['OK', 'Cancel']
         };
@@ -90,11 +91,16 @@ let Popup = React.createClass({
             ref: 'content',
             parent: this
         });
+
+        if (this.props.closable) {
+            var closeBtn = <a className="Close" onClick={this.close} href="javascript:;">&times;</a>;
+        }
+
         return (
             <div id={props.id} className={className}>
                 <div className="Title">
                     <h1>{props.title}</h1>
-                    <a className="Close" onClick={this.close} href="javascript:;">&times;</a>
+                    {closeBtn}
                 </div>
                 <div className="Content">{content}</div>
                 {footer}
