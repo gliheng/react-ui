@@ -27,7 +27,15 @@ export default {
         for (var key in this.refs) {
             var c = this.refs[key];
             if (typeof c.resize == 'function') {
-                c.resize();
+                var $node = c.getDOMNode();
+                var w = $node.clientWidth,
+                    h = $node.clientHeight;
+                if (w != 0 && h != 0) {
+                    // use DOM size if we can get it
+                    c.resize(w, h);
+                } else {
+                    c.resize();
+                }
             }
         }
     },
