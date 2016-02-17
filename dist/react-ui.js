@@ -601,7 +601,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        for (var key in this.refs) {
 	            var c = this.refs[key];
 	            if (typeof c.resize == 'function') {
-	                c.resize();
+	                var $node = c.getDOMNode();
+	                var w = $node.clientWidth,
+	                    h = $node.clientHeight;
+	                if (w != 0 && h != 0) {
+	                    // use DOM size if we can get it
+	                    c.resize(w, h);
+	                } else {
+	                    c.resize();
+	                }
 	            }
 	        }
 	    },
@@ -1396,8 +1404,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    mixins: [_mixinsResponsive2['default'], _mixinsPersistentState2['default']],
 
 	    getInitialState: function getInitialState() {
-	        this._widthCache = [];
-
 	        return {
 	            curTab: this.props.curTab,
 	            showMore: false
@@ -1433,8 +1439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var $tabContainer = this.refs.tabContainer.getDOMNode(),
 
 	        // showMore = $tabContainer.clientWidth < $tabContainer.scrollWidth;
-	        // showMore = this.outofViewTabs().length > 0;
-	        showMore = this.getTotalWidth() > this.getViewWidth();
+	        showMore = this.outofViewTabs().length > 0;
 	        if (showMore != this.state.showMore) {
 	            this.setState({
 	                showMore: showMore
@@ -1444,42 +1449,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            this.fitTabBarScroll(this.state.curTab);
 	        }
-	    },
-
-	    getTotalWidth: function getTotalWidth() {
-	        var _this2 = this;
-
-	        return this._items.reduce(function (accu, item) {
-	            return accu + _this2.getItemWidth(item);
-	        }, 0);
-	    },
-
-	    getViewWidth: function getViewWidth() {
-	        var width = this.refs.tabContainer.getDOMNode().clientWidth;
-	        // we need to show more, but we don't have more button on screen yet
-	        if (this.state.showMore && !this.refs['tabItem-__more__']) {
-	            width -= this.props.moreTabWidth;
-	        }
-	        return width;
-	    },
-
-	    getItemWidth: function getItemWidth(item) {
-	        if (item.id in this._widthCache) {
-	            return this._widthCache[item.id];
-	        }
-
-	        var $div = document.createElement('div');
-	        $div.innerHTML = '<div class="Tabs-Bar-Item"><span>' + item.label + '</span></div>';
-
-	        var $node = $div.firstElementChild,
-	            $parent = this.refs.tabContainer.getDOMNode();
-
-	        $parent.appendChild($node);
-	        var style = window.getComputedStyle($node);
-	        var w = $node.clientWidth + parseInt(style.getPropertyValue('margin-left')) + parseInt(style.getPropertyValue('margin-right'));
-	        this._widthCache[item.id] = w;
-	        $node.parentNode.removeChild($node);
-	        return w;
 	    },
 
 	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
@@ -1514,7 +1483,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    showMoreMenu: function showMoreMenu(evt) {
-	        var _this3 = this;
+	        var _this2 = this;
 
 	        evt.nativeEvent.stopImmediatePropagation();
 
@@ -1522,7 +1491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _Menu2['default'].show(evt.nativeEvent, {
 	            options: options
 	        }, function (item, path, data) {
-	            _this3.setTab(item.id);
+	            _this2.setTab(item.id);
 	        });
 	    },
 
@@ -1540,7 +1509,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    outofViewTabs: function outofViewTabs() {
-	        var _this4 = this;
+	        var _this3 = this;
 
 	        // tabItems's parent node's rect
 
@@ -1557,7 +1526,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                title: item.label
 	            };
 	        }).filter(function (item, i) {
-	            return _this4.tabOutofView(item.id, left, right);
+	            return _this3.tabOutofView(item.id, left, right);
 	        });
 	    },
 
@@ -1602,18 +1571,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /* set current active tab */
 	    setTab: function setTab(id, cbk) {
-	        var _this5 = this;
+	        var _this4 = this;
 
 	        this.fitTabBarScroll(id);
 
 	        this.setState({
 	            curTab: id
 	        }, function () {
-	            if (typeof _this5.props.indexChanged == 'function') {
-	                _this5.props.indexChanged(id);
+	            if (typeof _this4.props.tabChanged == 'function') {
+	                _this4.props.tabChanged(id);
 	            }
 	            cbk && cbk();
-	            _this5.saveState();
+	            _this4.saveState();
 	        });
 	    },
 
@@ -1655,7 +1624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    renderTabbar: function renderTabbar() {
-	        var _this6 = this;
+	        var _this5 = this;
 
 	        // if too many tabs are shown, this group them into menu
 	        var moreTab;
@@ -1673,7 +1642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            'div',
 	            { ref: 'tabContainer', className: 'Tabs-Bar-Item-Container' },
 	            this._items.map(function (tab, i) {
-	                return _this6.renderTabbarItem(tab, i);
+	                return _this5.renderTabbarItem(tab, i);
 	            })
 	        );
 	        var toolBtns = _react2['default'].createElement(
@@ -1696,7 +1665,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        );
 	    },
 
-	    renderTabbarItem: function renderTabbarItem(tab, i, left) {
+	    renderTabbarItem: function renderTabbarItem(tab, i) {
 	        var isActive = tab.id == this.state.curTab;
 	        var className = 'Tabs-Bar-Item';
 	        if (isActive) {
@@ -2213,6 +2182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    getDefaultProps: function getDefaultProps() {
 	        return {
+	            closable: true,
 	            animated: true,
 	            buttons: ['OK', 'Cancel']
 	        };
@@ -2297,6 +2267,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            ref: 'content',
 	            parent: this
 	        });
+
+	        if (this.props.closable) {
+	            var closeBtn = _react2['default'].createElement(
+	                'a',
+	                { className: 'Close', onClick: this.close, href: 'javascript:;' },
+	                '×'
+	            );
+	        }
+
 	        return _react2['default'].createElement(
 	            'div',
 	            { id: props.id, className: className },
@@ -2308,11 +2287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    null,
 	                    props.title
 	                ),
-	                _react2['default'].createElement(
-	                    'a',
-	                    { className: 'Close', onClick: this.close, href: 'javascript:;' },
-	                    '×'
-	                )
+	                closeBtn
 	            ),
 	            _react2['default'].createElement(
 	                'div',
