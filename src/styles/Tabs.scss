@@ -77,6 +77,25 @@
     .Tabs-Bar-ToolBtns:empty {
         display: none;
     }
+    .ico.add {
+        position: relative;
+        width: 20px;
+        height: 20px;
+        margin-top: 8px;
+    }
+    .ico.add::before, .ico.add::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 1px;
+        background: black;
+        position: absolute;
+        top: 9px;
+        left: 0;
+    }
+    .ico.add::after {
+        transform: rotateZ(90deg);
+    }
 }
 
 .Tabs-Content {

@@ -212,7 +212,7 @@ let Tabs = React.createClass({
         // optional add button to create more tabs
         var addTab;
         if (this.props.createTab) {
-            addTab = this.renderTabbarItem({label: '╋', id: '__add__'});
+            addTab = this.renderTabbarItem({label: <div className="ico add"></div>, id: '__add__'});
         }
 
         var barItems = (
