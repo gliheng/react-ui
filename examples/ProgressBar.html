@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ReactUI ProgressBar Demo</title>
+        <link rel="stylesheet" href="styles/style.css" charset="utf-8">
+        <style type="text/css" media="screen">
+            body {
+                padding: 10px;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="../node_modules/react/dist/react-with-addons.js" charset="utf-8"></script>
+        <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
+        <script src="../dist/react-ui.js" charset="utf-8"></script>
+        <script type="text/jsx">
+            var ProgressBar = ReactUI.ProgressBar;
+
+            var app = React.render(
+                <ProgressBar />,
+                document.getElementById('app')
+            );
+
+            var current = 0;
+            var timer = setInterval(function() {
+                current += 1;
+                app.setProgress(current);
+                if (current == 100) {
+                    clearInterval(timer);
+                }
+            }, 100);
+        </script>
+    </body>
+</html>
+
