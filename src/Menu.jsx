@@ -23,7 +23,7 @@ let Menu = React.createClass({
         }
 
         if (docLeft + left + Constants.config.menuItemWidth > document.documentElement.clientWidth) {
-            // can't fit right, invert direction
+            // can't fit right, horizontal invert
             left -= Constants.config.menuItemWidth;
         } else {
             left += 2;
@@ -32,11 +32,11 @@ let Menu = React.createClass({
         var options = config ? config.options : this.props.options,
             menuHeight = options.length * Constants.config.menuItemHeight;
         if (docTop + top + menuHeight > document.documentElement.clientHeight) {
-            // can't fit bottom, invert direction
+            // can't fit bottom, vertical invert
             var itemSize = options.filter(function (opt) {
                 return opt != SEP;
             }).length;
-            var menuHeight = itemSize * Constants.config.menuItemHeight
+            var menuHeight = (itemSize - 1) * Constants.config.menuItemHeight
                 + (options.length - itemSize) * Constants.config.menuSepItemHeight;
             top -= menuHeight;
         }
