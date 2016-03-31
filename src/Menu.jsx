@@ -11,6 +11,10 @@ let Menu = React.createClass({
         };
     },
 
+    isRootMenu() {
+        return !this.props.parent;
+    },
+
     showAt(pos, config) {
         var left = pos.left,
             top = pos.top,
@@ -34,11 +38,9 @@ let Menu = React.createClass({
             menuHeight = options.length * Constants.config.menuItemHeight;
         if (docTop + top + menuHeight > document.documentElement.clientHeight) {
             // can't fit bottom, vertical invert
-            var itemSize = options.filter(function (opt) {
-                return opt != SEP;
-            }).length;
-            var menuHeight = (config ? itemSize : itemSize - 1) * Constants.config.menuItemHeight
-                + (options.length - itemSize) * Constants.config.menuSepItemHeight;
+            var submenuSize = options.filter((opt)=> opt != SEP).length;
+            var menuHeight = (this.isRootMenu() ? submenuSize : submenuSize - 1) * Constants.config.menuItemHeight
+                + (options.length - submenuSize) * Constants.config.menuSepItemHeight;
             top -= menuHeight;
         }
 
