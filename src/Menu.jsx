@@ -15,16 +15,17 @@ let Menu = React.createClass({
         var left = pos.left,
             top = pos.top,
             docLeft = 0,
-            docTop = 0;
+            docTop = 0,
+            width = this.getDOMNode().getBoundingClientRect().width;
         if (!config) {
             // relative position of the menu's parent menu item
             var rect = this.getDOMNode().parentNode.getBoundingClientRect();
             var {left: docLeft, top: docTop} = rect;
         }
 
-        if (docLeft + left + Constants.config.menuItemWidth > document.documentElement.clientWidth) {
+        if (docLeft + left + width > document.documentElement.clientWidth) {
             // can't fit right, horizontal invert
-            left -= Constants.config.menuItemWidth;
+            left = config ? document.documentElement.clientWidth - width : -width + 2;
         } else {
             left += 2;
         }
@@ -36,7 +37,7 @@ let Menu = React.createClass({
             var itemSize = options.filter(function (opt) {
                 return opt != SEP;
             }).length;
-            var menuHeight = (itemSize - 1) * Constants.config.menuItemHeight
+            var menuHeight = (config ? itemSize : itemSize - 1) * Constants.config.menuItemHeight
                 + (options.length - itemSize) * Constants.config.menuSepItemHeight;
             top -= menuHeight;
         }
@@ -63,10 +64,7 @@ let Menu = React.createClass({
 
         if (all) {
             var parent = this.props.parent;
-            while (parent) {
-                parent.hide(all);
-                parent = parent.props.parent;
-            }
+            parent && parent.hide(all);
         }
     },
 
@@ -155,7 +153,7 @@ let Menu = React.createClass({
             options = this.state.options || this.props.options,
             position = this.state.position || this.props.position,
             contents;
-        if (this.state.show) {
+        if (options) {
             var idx = 0, item;
             var items = options.map((item)=> {
                 // For seperators, index should not increase
@@ -169,6 +167,12 @@ let Menu = React.createClass({
                 </div>
             );
         }
+        if (!this.state.show) {
+            position = {
+                top: -9999,
+                left: -9999
+            }
+        }
         return (
             <div className={className} style={position}>
                 {contents}
@@ -179,9 +183,9 @@ let Menu = React.createClass({
 
 
 export default {
-    init: function () {
+    init: function (options) {
         var $root = getTMPDOMRoot();
-        var menu = <Menu />;
+        var menu = <Menu options={options}/>;
         this.menu = React.render(menu, $root);
         this.hide = this.hide.bind(this);
     },
@@ -189,7 +193,7 @@ export default {
     show: function (evt, config, cbk) {
         if (!this.menu) {
             // singleton, lazy initialization
-            this.init();
+            this.init(config.options);
         }
 
         var position;
@@ -220,6 +224,7 @@ export default {
     hide() {
         if (!this.menu) return;
         this.menu.hide();
+        document.removeEventListener('click', this.hide);
 
         var $root = this.menu.getDOMNode().parentNode;
         React.unmountComponentAtNode($root);
