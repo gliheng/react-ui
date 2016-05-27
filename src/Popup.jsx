@@ -26,7 +26,8 @@ let Popup = React.createClass({
 
     getInitialState() {
         return {
-            hide: false
+            hide: false,
+            title: this.props.title
         };
     },
 
@@ -75,6 +76,12 @@ let Popup = React.createClass({
         $root.parentNode.removeChild($root);
     },
 
+    setTitle(title) {
+        this.setState({
+            title: title
+        });
+    },
+
     render() {
         var className = 'Popup',
             props = this.props,
@@ -99,7 +106,7 @@ let Popup = React.createClass({
         return (
             <div id={props.id} className={className}>
                 <div className="Title">
-                    <h1>{props.title}</h1>
+                    <h1>{state.title}</h1>
                     {closeBtn}
                 </div>
                 <div className="Content">{content}</div>
