@@ -3,21 +3,16 @@ import React from 'react';
 let ProgressBar = React.createClass({
     getDefaultProps() {
         return {
-            showLabel: true
-        };
-    },
-    getInitialState() {
-        return {
+            showLabel: true,
             progress: 0
         };
     },
-    setProgress(percent) {
-        this.setState({
-            progress: Math.min(Math.max(Math.round(percent), 0), 100)
-        });
-    },
     render() {
-        let p = this.state.progress + '%',
+        var progress = this.props.progress;
+
+        progress = Math.min(Math.max(Math.round(progress), 0), 100);
+        
+        let p = progress + '%',
             style = {
                 width: p
             };

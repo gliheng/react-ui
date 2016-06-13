@@ -17,21 +17,32 @@
         <script src="../node_modules/react/dist/JSXTransformer.js" charset="utf-8"></script>
         <script src="../dist/react-ui.js" charset="utf-8"></script>
         <script type="text/jsx">
-            var ProgressBar = ReactUI.ProgressBar;
+         var ProgressBar = ReactUI.ProgressBar;
+         var App = React.createClass({
+             getInitialState() {
+                 return {
+                     progress: 0
+                 }
+             },
+             render() {
+                 return <ProgressBar progress={this.state.progress} />;
+             }
+         });
+         var app = React.render(
+             <App />,
+             document.getElementById('app')
+         );
 
-            var app = React.render(
-                <ProgressBar />,
-                document.getElementById('app')
-            );
-
-            var current = 0;
-            var timer = setInterval(function() {
-                current += 1;
-                app.setProgress(current);
-                if (current == 100) {
-                    clearInterval(timer);
-                }
-            }, 100);
+         var current = 0;
+         var timer = setInterval(function() {
+             current += 1;
+             app.setState({
+                 progress: current
+             });
+             if (current == 100) {
+                 clearInterval(timer);
+             }
+         }, 100);
         </script>
     </body>
 </html>
