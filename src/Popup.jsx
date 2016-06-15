@@ -69,7 +69,7 @@ let Popup = React.createClass({
     close() {
         var {popupClosing} = this.props;
         if (typeof popupClosing == 'function') {
-            if (popupClosing()) return;
+            if (popupClosing.call(this)) return;
         }
         if (this.props.animated) {
             this.setState({
