@@ -54,7 +54,23 @@ let Popup = React.createClass({
         }
     },
 
+    show() {
+        this.setState({
+            hide: false
+        });
+    },
+    
+    hide() {
+        this.setState({
+            hide: true
+        });        
+    },
+
     close() {
+        var {popupClosing} = this.props;
+        if (typeof popupClosing == 'function') {
+            if (popupClosing()) return;
+        }
         if (this.props.animated) {
             this.setState({
                 hide: true
