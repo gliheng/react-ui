@@ -55,15 +55,13 @@ let Popup = React.createClass({
     },
 
     show() {
-        this.setState({
-            hide: false
-        });
+        var parentNode = this.getDOMNode().parentNode;
+        parentNode.style.display = 'block';
     },
     
     hide() {
-        this.setState({
-            hide: true
-        });        
+        var parentNode = this.getDOMNode().parentNode;
+        parentNode.style.display = 'none';
     },
 
     close() {
