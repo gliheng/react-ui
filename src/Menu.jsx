@@ -27,7 +27,7 @@ let Menu = React.createClass({
             var {left: docLeft, top: docTop} = rect;
         }
 
-        if (docLeft + left + width > document.documentElement.clientWidth) {
+        if (docLeft + left + width > document.body.scrollLeft + window.innerWidth) {
             // can't fit right, horizontal invert
             left = config ? document.documentElement.clientWidth - width : -width + 2;
         } else {
@@ -36,7 +36,7 @@ let Menu = React.createClass({
 
         var options = config ? config.options : this.props.options,
             menuHeight = options.length * Constants.config.menuItemHeight;
-        if (docTop + top + menuHeight > document.documentElement.clientHeight) {
+        if (docTop + top + menuHeight > document.body.scrollTop + window.innerHeight) {
             // can't fit bottom, vertical invert
             var submenuSize = options.filter((opt)=> opt != SEP).length;
             var menuHeight = (this.isRootMenu() ? submenuSize : submenuSize - 1) * Constants.config.menuItemHeight
@@ -202,8 +202,8 @@ export default {
         if (config.position) {
             position = config.position;
         } else {
-            var x = evt.clientX,
-                y = evt.clientY;
+            var x = document.body.scrollLeft + evt.clientX,
+                y = document.body.scrollTop + evt.clientY;
 
             position = {
                 top: y,

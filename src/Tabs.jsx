@@ -127,7 +127,8 @@ let Tabs = React.createClass({
             rect = $node.getBoundingClientRect(),
             l = rect.left,
             r = l + rect.width;
-        return r <= left || l > right;
+        return l < left || r > right;
+        /* return r <= left || l >= right; */
     },
 
     componentDidUpdate() {
