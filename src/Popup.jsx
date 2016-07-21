@@ -6,7 +6,7 @@ import {getTMPDOMRoot} from './Utils';
 let Popup = React.createClass({
     statics: {
         show: function (args) {
-            var $root = getTMPDOMRoot(args.modal);
+            var $root = getTMPDOMRoot(args.modal, args.maskClassName);
             var popup = (
                 <Popup {...args}>
                     {args.content}
