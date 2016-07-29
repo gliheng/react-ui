@@ -123,6 +123,7 @@ let Menu = React.createClass({
     renderMenuItem(option, idx) {
         var label = option,
             style,
+            chose,
             subMenu;
 
         if (label == SEP) {
@@ -132,6 +133,7 @@ let Menu = React.createClass({
         if (typeof option == 'object') {
             // generate children
             label = [option.title];
+            chose = option.chose;
             if (Array.isArray(option.children)) {
                 label.push(<i className="ico gt"></i>);
                 subMenu = <Menu ref={`child-${idx}`} idx={idx} options={option.children} parent={this}/>;
@@ -140,6 +142,7 @@ let Menu = React.createClass({
         }
 
         var item = <li
+            className={chose?"on":""}
             key={idx}
             style={style}
             data-idx={idx}
