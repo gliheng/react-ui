@@ -87,11 +87,12 @@ export function extend(target, ...objs) {
     return target;
 }
 
-export function getTMPDOMRoot(modal) {
+export function getTMPDOMRoot(modal, _className) {
     var $root = document.createElement('div'),
         className = 'TMPDOMRoot';
 
     if (modal) className += ' Mask';
+    if (_className) className += ' ' + _className;
     $root.className = className;
 
     document.body.appendChild($root);
