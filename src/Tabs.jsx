@@ -15,22 +15,27 @@ let Tabs = React.createClass({
         };
     },
 
-	closeTab(idx, id, tab, evt) {
-		evt && evt.stopPropagation();
+    closeTab(idx, id, tab, evt) {
+        evt && evt.stopPropagation();
+        this.jumpToNearestTab(idx, id);
+        this.props.closeTab.apply(null, arguments);
+    },
 
+    jumpToNearestTab(idx, id) {
+        var nextC;
         if (id == this.state.curTab) {
             // the current tab is closed
             var tabs = this._items;
             // jump to nearest tab
-            var nextC = tabs[idx-1] || tabs[idx+1];
+            nextC = tabs[idx-1] || tabs[idx+1];
             if (nextC) {
                 this.setState({
                     curTab: nextC.id
                 });
             }
         }
-		this.props.closeTab.apply(null, arguments);
-	},
+        return nextC && nextC.id;
+    },
 
     // when tab is resized check if tabs can fix into screen
     // otherwise show more button
